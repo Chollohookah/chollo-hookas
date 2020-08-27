@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/theming";
+@include mat-core();
+@import "./palettes/palette.scss";
+
+$hookas-app-primary: mat-palette($md-mcgpalett);
+$hookas-app-accent: mat-palette($md-mcgpalette1);
+$hookas-app-warn: mat-palette($md);
+$hookas-app-theme: mat-light-theme(
+  $hookas-app-primary,
+  $hookas-app-accent,
+  $hookas-app-warn
+);
+@include angular-material-theme($hookas-app-theme);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
