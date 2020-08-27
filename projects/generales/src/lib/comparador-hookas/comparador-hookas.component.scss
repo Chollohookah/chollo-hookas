@@ -1,0 +1,18 @@
+@import "../../../../../src/variables.scss";
+.inputComparador {
+  width: 100%;
+  position: relative;
+  .mat-form-field-flex {
+    background-color: $secondaryColor !important;
+  }
+  mat-icon {
+    position: absolute;
+    right: 1vh;
+    top: 1.5vh;
+    user-select: none;
+  }
+}
+
+.filtrosAvanzados {
+  margin-top: -20px;
+}

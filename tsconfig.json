@@ -12,6 +12,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/generales/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/generales/tsconfig.spec.json"
     }
 ]
 }

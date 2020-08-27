@@ -1,0 +1,22 @@
+<div class="inputComparador">
+  <mat-form-field appearance="fill" *ngIf="_model" class="w-100">
+    <mat-label *ngIf="_model.textoInputAntesDeClickear">{{
+      _model.textoInputAntesDeClickear
+    }}</mat-label>
+    <input
+      *ngIf="_model.placeholderAlComenzarAEscribir"
+      matInput
+      placeholder="{{ _model.placeholderAlComenzarAEscribir }}"
+    />
+  </mat-form-field>
+  <mat-icon
+    *ngIf="_model.sufijoIcono"
+    [ngClass]="_model.sufijoIcono.customClass"
+    matSuffix
+    (click)="_model.sufijoIcono.alHacerClick()"
+    >{{ _model.sufijoIcono.nombre }}</mat-icon
+  >
+</div>
+<div class="filtrosAvanzados">
+  <lib-filtros-avanzados></lib-filtros-avanzados>
+</div>

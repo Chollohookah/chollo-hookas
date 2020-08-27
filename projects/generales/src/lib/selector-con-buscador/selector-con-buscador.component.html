@@ -1,0 +1,17 @@
+<div [formGroup]="formularioBusqueda">
+  <mat-form-field appearance="fill">
+    <mat-label>Marca</mat-label>
+    <mat-select formControlName="itemSeleccionado">
+      <mat-form-field class="selectorPadre">
+        <input
+          matInput
+          placeholder="Busqueda de marca"
+          formControlName="busqueda"
+        />
+      </mat-form-field>
+      <mat-option *ngFor="let valor of arrayDatos" [value]="valor.valor">
+        {{ valor.clave }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
