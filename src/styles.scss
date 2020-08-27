@@ -12,6 +12,8 @@ $hookas-app-theme: mat-light-theme(
 );
 @include angular-material-theme($hookas-app-theme);
 
+
+
 html,
 body {
   height: 100%;
