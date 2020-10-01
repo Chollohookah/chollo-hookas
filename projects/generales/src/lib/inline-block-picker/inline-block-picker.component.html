@@ -1,0 +1,11 @@
+<mat-chip-list [multiple]="true">
+  <mat-chip
+    class="bg-secondary text-white"
+    [ngClass]="customCssClass"
+    *ngFor="let chipData of _chipsInput"
+    (click)="
+      chipData.customClickEvent ? chipData.customClickEvent() : emitirClick()
+    "
+    >{{ chipData.texto }}</mat-chip
+  >
+</mat-chip-list>

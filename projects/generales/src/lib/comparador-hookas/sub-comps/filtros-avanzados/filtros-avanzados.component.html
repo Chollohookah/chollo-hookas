@@ -1,3 +1,19 @@
 <div class="contenedorFiltrosAvanzados">
-  <lib-selector-con-buscador></lib-selector-con-buscador>
+  <div class="d-flex flex-wrap p-3">
+    <lib-selector-con-buscador
+      class="flex-fill"
+      *ngFor="let configuracion of obtainOnlySelectors()"
+      [initialConfig]="configuracion.configuracionInicial"
+      [entradaSelector]="configuracion.datos"
+      (selectedValueChanged)="receiveChangedValue($event)"
+    ></lib-selector-con-buscador>
+    <div>
+      <span>Selección de tamaño</span>
+      <mat-divider class="my-2"></mat-divider>
+      <lib-inline-block-picker
+        [chipsInput]="configuracionFiltrosAvanzados.chipsPickers.tamanyo"
+        (emitirClick)="receiveChangedValue($event)"
+      ></lib-inline-block-picker>
+    </div>
+  </div>
 </div>

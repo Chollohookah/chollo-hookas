@@ -8,8 +8,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 import { FiltrosAvanzadosComponent } from './comparador-hookas/sub-comps/filtros-avanzados/filtros-avanzados.component';
 import { SelectorConBuscadorComponent } from './selector-con-buscador/selector-con-buscador.component';
+import { InlineBlockPickerComponent } from './inline-block-picker/inline-block-picker.component';
+import { CardViewerComponent } from './card-viewer/card-viewer.component';
+import { CargandoCachimbasComponent } from './cargando-cachimbas/cargando-cachimbas.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,6 +23,9 @@ import { SelectorConBuscadorComponent } from './selector-con-buscador/selector-c
     ComparadorHookasComponent,
     FiltrosAvanzadosComponent,
     SelectorConBuscadorComponent,
+    InlineBlockPickerComponent,
+    CardViewerComponent,
+    CargandoCachimbasComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +35,11 @@ import { SelectorConBuscadorComponent } from './selector-con-buscador/selector-c
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatChipsModule,
+    MatDividerModule,
+    HttpClientModule
   ],
   exports: [GeneralesComponent, ComparadorHookasComponent],
+  providers: [],
 })
 export class GeneralesModule {}

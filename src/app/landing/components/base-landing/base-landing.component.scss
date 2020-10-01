@@ -10,7 +10,12 @@
   .contendorBusqueda {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
     height: 100%;
     width: 90vh;
+  }
+  .imagenLogo{
+    max-width: 120px;
   }
 }

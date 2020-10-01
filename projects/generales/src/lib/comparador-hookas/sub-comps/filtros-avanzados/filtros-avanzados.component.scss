@@ -1,4 +1,8 @@
 @import "../../../../../../../src/variables.scss";
 .contenedorFiltrosAvanzados {
-  background-color: $ternaryColor;
+  background-color: lighten($color: $ternaryColor, $amount: 50%);
+  height: 100%;
+  lib-selector-con-buscador {
+    margin: 1vh 0.5vh;
+  }
 }

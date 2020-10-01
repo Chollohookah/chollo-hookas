@@ -8,4 +8,7 @@ export interface ComparadorHookasInputModel {
   textoInputAntesDeClickear: string;
   placeholderAlComenzarAEscribir: string;
   sufijoIcono: ComparadorHookasIconoConfig;
+  
+  estadoAnimacion:'empezada'|'terminada';
+  estadoExpansion:'abierta'|'cerrada';
 }

@@ -20,3 +20,15 @@
 <div class="filtrosAvanzados">
   <lib-filtros-avanzados></lib-filtros-avanzados>
 </div>
+
+<div class="cargaCachimbas">
+  <lib-cargando-cachimbas
+    *ngIf="!peticionCargaHookasTerminada"
+  ></lib-cargando-cachimbas>
+</div>
+
+<div>
+  <lib-card-viewer *ngFor="let cachimba of cachimbas">
+    
+  </lib-card-viewer>
+</div>

@@ -1,15 +1,22 @@
-<div [formGroup]="formularioBusqueda">
-  <mat-form-field appearance="fill">
-    <mat-label>Marca</mat-label>
+<div [formGroup]="formularioBusqueda" class="d-inline">
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>{{
+      initialConfigObj && initialConfigObj.label
+        ? initialConfigObj.label
+        : "Sin nombre"
+    }}</mat-label>
     <mat-select formControlName="itemSeleccionado">
       <mat-form-field class="selectorPadre">
         <input
           matInput
-          placeholder="Busqueda de marca"
+          placeholder="Busqueda de {{initialConfigObj.label.toLowerCase()}}"
           formControlName="busqueda"
         />
+        <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
       <mat-option *ngFor="let valor of arrayDatos" [value]="valor.valor">
+        <span class="flag-icon flag-icon-au flag-icon-squared"></span>
+        <img src="{{ valor.bandera }}" *ngIf="valor.bandera" />
         {{ valor.clave }}
       </mat-option>
     </mat-select>

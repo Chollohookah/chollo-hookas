@@ -1,10 +1,16 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewEncapsulation,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { cloneDeep } from 'lodash-es';
-export interface SelectorConBuscadorValores {
-  clave: string;
-  valor: any;
-}
+import { InitialConfigInputMaterial, ClaveValorModel, ClaveValorBandera } from '../comparador-hookas/interfaces/FiltrosAvanzadosModel';
+import { KeyValue } from '@angular/common';
+
 @Component({
   selector: 'lib-selector-con-buscador',
   templateUrl: './selector-con-buscador.component.html',
@@ -12,20 +18,37 @@ export interface SelectorConBuscadorValores {
   encapsulation: ViewEncapsulation.None,
 })
 export class SelectorConBuscadorComponent implements OnInit {
-  @Input('entradaSelector') set entradaSelector(
-    arrayDatos: Array<SelectorConBuscadorValores>
+  @Input('initialConfig') set initialConfig(
+    inicialConfig: InitialConfigInputMaterial
   ) {
-    if (arrayDatos) {
+    if (inicialConfig) {
+      this.initialConfigObj = inicialConfig;
+      if (this.initialConfigObj.disabled) {
+        this.formularioBusqueda.get('itemSeleccionado').disable();
+      } else {
+        this.formularioBusqueda.get('itemSeleccionado').enable();
+      }
+    }
+  }
+
+  @Input('entradaSelector') set entradaSelector(
+    arrayDatos: Array<ClaveValorBandera>
+  ) {
+    if (arrayDatos && arrayDatos instanceof Array && arrayDatos.length > 0) {
       this.arrayDatos = cloneDeep(arrayDatos);
       this.arrayDatosClone = cloneDeep(this.arrayDatos);
-      this.formularioBusqueda.get('busqueda').enable();
+      this.yesData();
     } else {
       this.noData();
     }
   }
 
-  public arrayDatos: Array<SelectorConBuscadorValores> = [];
-  private arrayDatosClone: Array<SelectorConBuscadorValores> = [];
+  public initialConfigObj: InitialConfigInputMaterial;
+  public arrayDatos: Array<ClaveValorModel> = [];
+  private arrayDatosClone: Array<ClaveValorModel> = [];
+  @Output('selectedValueChanged') selectedValueChanged = new EventEmitter<
+    any
+  >();
 
   public formularioBusqueda: FormGroup;
 
@@ -35,13 +58,45 @@ export class SelectorConBuscadorComponent implements OnInit {
       itemSeleccionado: [null, []],
     });
     this.noData();
+    this.listenFormKeysWithCallbacksOnTrigger('busqueda', (valor: string) => {
+      this.arrayDatos = cloneDeep(
+        this.arrayDatosClone.filter((entry) =>
+          entry.clave.toLowerCase().includes(valor.toLowerCase())
+        )
+      );
+    });
+    this.listenFormKeysWithCallbacksOnTrigger(
+      'itemSeleccionado',
+      (valor: string) => {
+        if (valor != null) {
+          this.selectedValueChanged.emit({
+            clave: this.initialConfigObj.idKey,
+            valor,
+          } as ClaveValorModel);
+        }
+      }
+    );
   }
 
   ngOnInit(): void {}
 
+  private listenFormKeysWithCallbacksOnTrigger(
+    keyName: string,
+    callback: Function
+  ) {
+    this.formularioBusqueda.get(keyName).valueChanges.subscribe((data) => {
+      callback(data);
+    });
+  }
+
+  private yesData(): void {
+    this.formularioBusqueda.get('itemSeleccionado').enable();
+    this.formularioBusqueda.get('busqueda').enable();
+  }
+
   private noData(): void {
-    this.arrayDatos = [{ clave: 'No tenemos datos', valor: 'nodata' }];
-    this.arrayDatosClone = cloneDeep(this.arrayDatos);
+    this.formularioBusqueda.get('itemSeleccionado').reset();
+    this.formularioBusqueda.get('itemSeleccionado').disable();
     this.formularioBusqueda.get('busqueda').disable();
   }
 }
