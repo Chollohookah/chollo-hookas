@@ -1,0 +1,30 @@
+.cardViewer {
+  overflow: hidden;
+  .imagenHooka {
+    width: 200px;
+    height: 200px;
+  }
+  .anuncioCachi {
+    position: absolute;
+    right: -30px;
+    transform: rotate(45deg);
+    width: 120px;
+    text-align: center;
+  }
+  @mixin precio {
+    position: absolute;
+    bottom: 0px;
+    right: 1vh;
+  }
+  .precioNormal {
+    @include precio;
+  }
+  .precioRebajado {
+    @include precio;
+    bottom: 5px;
+    h2 {
+      margin: 0;
+    }
+
+  }
+}

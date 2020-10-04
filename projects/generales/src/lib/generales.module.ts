@@ -16,6 +16,9 @@ import { InlineBlockPickerComponent } from './inline-block-picker/inline-block-p
 import { CardViewerComponent } from './card-viewer/card-viewer.component';
 import { CargandoCachimbasComponent } from './cargando-cachimbas/cargando-cachimbas.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { HttpClientModule } from '@angular/common/http';
     MatFormFieldModule,
     MatChipsModule,
     MatDividerModule,
-    HttpClientModule
+    HttpClientModule,
+    ScrollingModule,
+    MatCardModule,
+    MatPaginatorModule,
   ],
   exports: [GeneralesComponent, ComparadorHookasComponent],
   providers: [],

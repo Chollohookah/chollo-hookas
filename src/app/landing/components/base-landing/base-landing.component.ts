@@ -23,8 +23,25 @@ export class BaseLandingComponent implements OnInit {
             .ejecutarAnimacion(
               '.filtrosAvanzados',
               estadoAnimacion == 'abierta'
-                ? { height: '0px', opacity: 0, duration: 100 }
-                : { height: '100%', opacity: 1, duration: 100 }
+                ? { opacity: 0, duration: 500 }
+                : {
+                    height: '100%',
+                    opacity: 1,
+                    duration: 100,
+                  },
+              estadoAnimacion == 'abierta'
+                ? (anim) => {
+                    let item = anim.animatables[0].target as HTMLElement;
+                    item = item.querySelector('.contenedorFiltrosAvanzados');
+                    item.classList.toggle('d-none');
+                    item.classList.remove('d-block');
+                  }
+                : (anim) => {
+                    let item = anim.animatables[0].target as HTMLElement;
+                    item = item.querySelector('.contenedorFiltrosAvanzados');
+                    item.classList.toggle('d-block');
+                    item.classList.remove('d-none');
+                  }
             )
             .then((data) => {
               this.modeloInputComparador.estadoExpansion =

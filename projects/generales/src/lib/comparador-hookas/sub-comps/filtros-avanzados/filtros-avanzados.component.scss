@@ -2,6 +2,12 @@
 .contenedorFiltrosAvanzados {
   background-color: lighten($color: $ternaryColor, $amount: 50%);
   height: 100%;
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+  height: auto;
+  right: 0;
+  border-radius: 0px 0px 0px 5px;
   lib-selector-con-buscador {
     margin: 1vh 0.5vh;
   }

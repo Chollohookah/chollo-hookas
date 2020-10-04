@@ -1,21 +1,44 @@
 @import "../../../../../src/variables.scss";
-.inputComparador {
-  width: 100%;
-  position: relative;
-  .mat-form-field-flex {
-    background-color: $secondaryColor !important;
-  }
-  mat-icon {
-    position: absolute;
-    right: 1vh;
-    top: 1.5vh;
-    user-select: none;
+.paginadorComp {
+  .mat-paginator {
+    background-color: transparent;
   }
 }
+.comparadorHookas {
+  .inputComparador {
+    width: 100%;
+    position: relative;
+    .mat-form-field-flex {
+      background-color: $secondaryColor !important;
+    }
+    mat-icon {
+      position: absolute;
+      right: 1vh;
+      top: 1.5vh;
+      user-select: none;
+    }
+  }
 
-.filtrosAvanzados {
-  margin-top: -20px;
-  opacity: 0;
-  height: 0px;
+  .filtrosAvanzados {
+    margin-top: -20px;
+    opacity: 0;
+    height: 0px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .displayRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    height: 600px;
+    overflow: auto;
+    .cardItemHooka {
+      padding: 10px 0px;
+      height: auto;
+      width: 250px;
+    }
+  }
 }
-
