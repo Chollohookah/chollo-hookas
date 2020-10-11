@@ -1,51 +1,60 @@
-<mat-card class="cardViewer" *ngIf="_item">
-  <mat-card-header>
-    <mat-card-title>{{ _item.titulo }}</mat-card-title>
-    <mat-card-subtitle>{{ _item.marca }}</mat-card-subtitle>
-    <div
-      class="anuncioCachi bg-{{ anuncioHooka.color }} text-{{
-        anuncioHooka.textColor
-      }}"
-      *ngIf="hayAnuncio()"
-    >
-      {{ anuncioHooka.texto }}
-    </div>
-  </mat-card-header>
+<div (mouseover)="nextTransition('in')" (mouseout)="nextTransition('out')">
+  <mat-card class="cardViewer" *ngIf="_item">
+    <mat-card-header>
+      <mat-card-title>{{ _item.titulo }}</mat-card-title>
+      <mat-card-subtitle>{{ _item.marca }}</mat-card-subtitle>
+      <div
+        class="anuncioCachi bg-{{ anuncioHooka.color }} text-{{
+          anuncioHooka.textColor
+        }}"
+        *ngIf="hayAnuncio()"
+      >
+        {{ anuncioHooka.texto }}
+      </div>
+    </mat-card-header>
 
-  <mat-card-content>
-    <img
-      src="{{ _item.imagen }}"
-      onerror="this.src = 'assets/no-camera.png';"
-      alt=""
-      srcset=""
-      class="imagenHooka"
-    />
+    <mat-card-content>
+      <img
+        src="{{ _item.imagen }}"
+        onerror="this.src = 'assets/no-camera.png';"
+        alt=""
+        srcset=""
+        class="imagenHooka"
+      />
 
-    <div
-      #precioNormal
-      class="precioNormal"
-      *ngIf="anuncioHooka == null || anuncioHooka.texto != 'OFERTA'"
-    >
-      <h2>
-        <span class="badge badge-primary">{{
-          _item.precioOriginal + _item.divisa
-        }}</span>
-      </h2>
-    </div>
-    <div
-      #precioRebajado
-      class="precioRebajado"
-      *ngIf="anuncioHooka != null && anuncioHooka.texto == 'OFERTA'"
-    >
-      <h2>
-        <span class="badge badge-primary">{{
-          _item.precioRebajado + _item.divisa
-        }}</span>
-      </h2>
+      <div
+        #precioNormal
+        class="precioNormal"
+        *ngIf="anuncioHooka == null || anuncioHooka.texto != 'OFERTA'"
+      >
+        <h2>
+          <span class="badge badge-primary">{{
+            _item.precioOriginal + _item.divisa
+          }}</span>
+        </h2>
+      </div>
+      <div
+        #precioRebajado
+        class="precioRebajado"
+        *ngIf="anuncioHooka != null && anuncioHooka.texto == 'OFERTA'"
+      >
+        <h2>
+          <span class="badge badge-primary">{{
+            _item.precioRebajado + _item.divisa
+          }}</span>
+        </h2>
 
-      <span class="badge badge-danger">
-        <s>{{ _item.precioOriginal + _item.divisa }}</s>
-      </span>
-    </div>
-  </mat-card-content>
-</mat-card>
+        <span class="badge badge-danger">
+          <s>{{ _item.precioOriginal + _item.divisa }}</s>
+        </span>
+      </div>
+      <div class="hoverComp-{{ _index }}">
+        <lib-lateral-actions
+          [backgroundColor]="'primary'"
+          [actions]="posiblesAccionesConCachimbas"
+        >
+        </lib-lateral-actions>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

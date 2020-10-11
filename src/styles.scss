@@ -1,7 +1,16 @@
 @import "~@angular/material/theming";
 @include mat-core();
 @import "./palettes/palette.scss";
-@import "~bootstrap/dist/css/bootstrap.min.css";
+@import './variables.scss';
+
+
+$theme-colors: (
+  "primary": $mainColor,
+  "secondary": $secondaryColor,
+  'ternary':$ternaryColor
+);
+
+@import "node_modules/bootstrap/scss/bootstrap";
 
 $hookas-app-primary: mat-palette($md-mcgpalett);
 $hookas-app-accent: mat-palette($md-mcgpalette1);

@@ -1,6 +1,7 @@
 export type BootstrapColors =
   | 'primary'
   | 'secondary'
+  | 'ternary'
   | 'success'
   | 'danger'
   | 'warning'
