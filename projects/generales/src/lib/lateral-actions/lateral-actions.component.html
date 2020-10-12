@@ -1,0 +1,10 @@
+<div class="wrapperLateralActions bg-{{ backgroundColor }}">
+  <button
+    mat-icon-button
+    *ngFor="let action of actions"
+    (click)="action.action()"
+    [matTooltip]="action.tooltip"
+  >
+    <mat-icon class="text-{{ action.color }}">{{ action.icon }}</mat-icon>
+  </button>
+</div>

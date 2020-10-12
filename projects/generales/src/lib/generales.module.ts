@@ -19,6 +19,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { LateralActionsComponent } from './lateral-actions/lateral-actions.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -29,6 +33,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     InlineBlockPickerComponent,
     CardViewerComponent,
     CargandoCachimbasComponent,
+    LateralActionsComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +41,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     FormsModule,
     MatIconModule,
     MatInputModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatRippleModule,
     MatSelectModule,
     MatFormFieldModule,
     MatChipsModule,

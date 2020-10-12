@@ -8,6 +8,7 @@
         *ngIf="_model.placeholderAlComenzarAEscribir"
         matInput
         placeholder="{{ _model.placeholderAlComenzarAEscribir }}"
+        #inputBusqueda
       />
     </mat-form-field>
     <mat-icon
@@ -30,12 +31,16 @@
 
   <div *ngIf="peticionCargaHookasTerminada">
     <div class="displayRow my-2">
-      <lib-card-viewer
+      <div
         *ngFor="let cachimba of cachimbas; let i = index"
-        class="cardItemHooka"
-        [index]="i"
-        [item]="cachimba"
-      ></lib-card-viewer>
+        class="wrapperCompCards"
+      >
+        <lib-card-viewer
+          class="cardItemHooka"
+          [index]="i"
+          [item]="cachimba"
+        ></lib-card-viewer>
+      </div>
     </div>
     <div class="paginadorComp">
       <mat-paginator

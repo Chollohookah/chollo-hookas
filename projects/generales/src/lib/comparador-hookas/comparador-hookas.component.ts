@@ -6,6 +6,7 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  QueryList,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -14,6 +15,12 @@ import { Site, Hooka } from './interfaces/ModeloHookasBack';
 import { HookasWithSiteMetadata } from './interfaces/RelationSiteHooka';
 import { cloneDeep } from 'lodash-es';
 import { PageEvent } from '@angular/material/paginator';
+import { PosibleActions } from '../lateral-actions/models/PosibleActions';
+import { fromEvent, Observable, of, timer } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { ViewChildren } from '@angular/core';
+import { WorkerManagerService } from '../servicios/worker-manager.service';
+
 @Component({
   selector: 'lib-comparador-hookas',
   templateUrl: './comparador-hookas.component.html',
@@ -28,13 +35,21 @@ export class ComparadorHookasComponent implements OnInit {
     }
   }
 
+  @ViewChildren('inputBusqueda') inputBusqueda: QueryList<any>;
+
   public _model: ComparadorHookasInputModel;
-  public _peticionCargaHookasTerminada: boolean = false;
   public cachimbas: Array<HookasWithSiteMetadata> = [];
   public copiaCachimbas: Array<HookasWithSiteMetadata> = [];
   public MAX_POR_PAGINA: number = 50;
   public PAGINA_ACTUAL: number = 0;
   public MAX_POR_PAGINA_POSIBILIDADES = [5, 25, this.MAX_POR_PAGINA, 100];
+
+  public set valorBusqueda(valor: string) {
+    this._valorBusqueda = valor;
+  }
+  public get valorBusqueda() {
+    return this._valorBusqueda;
+  }
 
   public set peticionCargaHookasTerminada(valor: boolean) {
     this._peticionCargaHookasTerminada = valor;
@@ -43,14 +58,41 @@ export class ComparadorHookasComponent implements OnInit {
     return this._peticionCargaHookasTerminada;
   }
 
+  private _peticionCargaHookasTerminada: boolean = false;
+  private _valorBusqueda: string = '';
+  private workerInstance: Worker;
+
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private workerS: WorkerManagerService
   ) {}
 
   ngOnInit(): void {
     this.cargarHookasGenerales();
+  }
+  ngAfterViewInit(): void {
+    this.escucharCambiosInput();
+  }
+
+  private escucharCambiosInput(): void {
+    fromEvent(this.inputBusqueda.first.nativeElement, 'input')
+      .pipe(debounceTime(500))
+      .subscribe((data) => {
+        if (!this.workerInstance) {
+          this.workerInstance = this.workerS.generateWorker(
+            '../web-workers/web-workers'
+          );
+        }
+        if (this.workerInstance) {
+          this.workerInstance.postMessage('hello');
+          this.workerInstance.onmessage = ({ data }) => {
+            console.log(data);
+          };
+          
+        }
+      });
   }
 
   public cambioPaginaPaginador(event: PageEvent) {
