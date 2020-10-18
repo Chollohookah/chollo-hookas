@@ -21,7 +21,7 @@ $hookas-app-theme: mat-light-theme(
   $hookas-app-warn
 );
 @include angular-material-theme($hookas-app-theme);
-
+@import './app/styles/mixins.scss';
 html,
 body {
   height: 100%;

@@ -11,6 +11,10 @@
     width: 120px;
     text-align: center;
   }
+  .contenidoCard {
+    display: flex;
+    justify-content: center;
+  }
   @mixin precio {
     position: absolute;
     bottom: 0px;

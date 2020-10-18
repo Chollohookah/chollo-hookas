@@ -18,12 +18,13 @@ import { CargandoCachimbasComponent } from './cargando-cachimbas/cargando-cachim
 import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCardModule } from '@angular/material/card';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { LateralActionsComponent } from './lateral-actions/lateral-actions.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { getSpanishPaginatorIntl } from '../lib/comparador-hookas/custom-strings-paginator/spanish-paginator-intl';
+import { HookaSearcherInputComponent } from './comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
 @NgModule({
   declarations: [
     GeneralesComponent,
@@ -34,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CardViewerComponent,
     CargandoCachimbasComponent,
     LateralActionsComponent,
+    HookaSearcherInputComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatPaginatorModule,
   ],
   exports: [GeneralesComponent, ComparadorHookasComponent],
-  providers: [],
+  providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],
 })
 export class GeneralesModule {}

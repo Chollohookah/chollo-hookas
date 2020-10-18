@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ComparadorHookasComponent } from 'projects/generales/src/lib/comparador-hookas/comparador-hookas.component';
 import { ComparadorHookasInputModel } from 'projects/generales/src/lib/comparador-hookas/interfaces/ComparadorHooksInputModel';
 import { AnimationControllerService } from '../../../../../projects/generales/src/lib/servicios/animation-controller.service';
+import { HookaSearcherInputComponent } from '../../../../../projects/generales/src/lib/comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
+
 @Component({
   selector: 'app-base-landing',
   templateUrl: './base-landing.component.html',
@@ -12,10 +15,12 @@ export class BaseLandingComponent implements OnInit {
     placeholderAlComenzarAEscribir: 'Cachimbas de todo tipo...',
     estadoAnimacion: 'terminada',
     estadoExpansion: 'cerrada',
-    sufijoIcono: {
+    iconoFiltro: {
       nombre: 'filter_list',
-
-      alHacerClick: () => {
+      condition: (context) => {
+        return true;
+      },
+      alHacerClick: (context: HookaSearcherInputComponent) => {
         if (this.modeloInputComparador.estadoAnimacion == 'terminada') {
           let estadoAnimacion = this.modeloInputComparador.estadoExpansion;
           this.modeloInputComparador.estadoAnimacion = 'empezada';
@@ -44,13 +49,24 @@ export class BaseLandingComponent implements OnInit {
                   }
             )
             .then((data) => {
-              this.modeloInputComparador.estadoExpansion =
-                estadoAnimacion == 'abierta' ? 'cerrada' : 'abierta';
+              this.modeloInputComparador.estadoExpansion = estadoAnimacion == 'abierta' ? 'cerrada' : 'abierta';
               this.modeloInputComparador.estadoAnimacion = 'terminada';
             });
         }
       },
       customClass: 'c-pointer',
+    },
+    iconoClear: {
+      nombre: 'delete',
+      alHacerClick: (context: HookaSearcherInputComponent) => {
+        context.inputBusqueda.first.nativeElement.value = '';
+        context.inputBusqueda.first.nativeElement.dispatchEvent(new Event('input'));
+      },
+      condition: (context: HookaSearcherInputComponent) => {
+        if (context.valorBusqueda.length > 0) return true;
+        return false;
+      },
+      customClass: 'c-pointer botonLimpiezaInput text-danger',
     },
   };
 

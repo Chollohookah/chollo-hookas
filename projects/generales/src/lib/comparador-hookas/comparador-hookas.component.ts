@@ -6,21 +6,20 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  QueryList,
+  Output,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
-import { ComparadorHookasInputModel } from './interfaces/ComparadorHooksInputModel';
+import { ComparadorHookasIconoConfig, ComparadorHookasInputModel } from './interfaces/ComparadorHooksInputModel';
 import { Site, Hooka } from './interfaces/ModeloHookasBack';
 import { HookasWithSiteMetadata } from './interfaces/RelationSiteHooka';
 import { cloneDeep } from 'lodash-es';
 import { PageEvent } from '@angular/material/paginator';
-import { PosibleActions } from '../lateral-actions/models/PosibleActions';
-import { fromEvent, Observable, of, timer } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { ViewChildren } from '@angular/core';
-import { WorkerManagerService } from '../servicios/worker-manager.service';
-
+import { HookaService } from './services/hooka-service.service';
+import { groupBy } from 'lodash-es';
+import { ConfiguracionFiltrosAvanzadosMarcas } from './interfaces/FiltrosAvanzadosModel';
+import { EventEmitter } from '@angular/core';
+import { FiltrosAplicadosObjModel } from './sub-comps/filtros-avanzados/filtros-avanzados.component';
 @Component({
   selector: 'lib-comparador-hookas',
   templateUrl: './comparador-hookas.component.html',
@@ -29,27 +28,8 @@ import { WorkerManagerService } from '../servicios/worker-manager.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComparadorHookasComponent implements OnInit {
-  @Input() set comparadorHookas(model: ComparadorHookasInputModel) {
-    if (model) {
-      this._model = model;
-    }
-  }
-
-  @ViewChildren('inputBusqueda') inputBusqueda: QueryList<any>;
-
-  public _model: ComparadorHookasInputModel;
-  public cachimbas: Array<HookasWithSiteMetadata> = [];
-  public copiaCachimbas: Array<HookasWithSiteMetadata> = [];
-  public MAX_POR_PAGINA: number = 50;
-  public PAGINA_ACTUAL: number = 0;
-  public MAX_POR_PAGINA_POSIBILIDADES = [5, 25, this.MAX_POR_PAGINA, 100];
-
-  public set valorBusqueda(valor: string) {
-    this._valorBusqueda = valor;
-  }
-  public get valorBusqueda() {
-    return this._valorBusqueda;
-  }
+  @Input() inputModel: ComparadorHookasInputModel;
+  public tradeMarksWithModelsSelectores: Array<ConfiguracionFiltrosAvanzadosMarcas> = [];
 
   public set peticionCargaHookasTerminada(valor: boolean) {
     this._peticionCargaHookasTerminada = valor;
@@ -59,87 +39,79 @@ export class ComparadorHookasComponent implements OnInit {
   }
 
   private _peticionCargaHookasTerminada: boolean = false;
-  private _valorBusqueda: string = '';
-  private workerInstance: Worker;
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private workerS: WorkerManagerService
+    public hookaService: HookaService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.cargarHookasGenerales();
   }
-  ngAfterViewInit(): void {
-    this.escucharCambiosInput();
-  }
 
-  private escucharCambiosInput(): void {
-    fromEvent(this.inputBusqueda.first.nativeElement, 'input')
-      .pipe(debounceTime(500))
-      .subscribe((data) => {
-        if (!this.workerInstance) {
-          this.workerInstance = this.workerS.generateWorker(
-            '../web-workers/web-workers'
-          );
-        }
-        if (this.workerInstance) {
-          this.workerInstance.postMessage('hello');
-          this.workerInstance.onmessage = ({ data }) => {
-            console.log(data);
-          };
-          
-        }
-      });
-  }
-
-  public cambioPaginaPaginador(event: PageEvent) {
-    this.PAGINA_ACTUAL = event.pageIndex + 1;
-    this.MAX_POR_PAGINA = event.pageSize;
-    let punteroMAximoArray = this.PAGINA_ACTUAL * this.MAX_POR_PAGINA;
-    let punteroInicial = punteroMAximoArray - this.MAX_POR_PAGINA;
-    this.cachimbas = this.copiaCachimbas.slice(
+  public cambioPaginaPaginador(event: PageEvent, specificArray?: Array<HookasWithSiteMetadata>) {
+    this.hookaService.PAGINA_ACTUAL = event.pageIndex + 1;
+    this.hookaService.MAX_POR_PAGINA = event.pageSize;
+    let punteroMAximoArray = this.hookaService.PAGINA_ACTUAL * this.hookaService.MAX_POR_PAGINA;
+    let punteroInicial = punteroMAximoArray - this.hookaService.MAX_POR_PAGINA;
+    this.hookaService.cachimbas = cloneDeep(specificArray ? specificArray : this.hookaService.copiaCachimbas);
+    this.hookaService.cachimbasSliced = (specificArray ? specificArray : this.hookaService.copiaCachimbas).slice(
       punteroInicial,
       punteroMAximoArray
     );
+
     this.changeDetectorRef.markForCheck();
   }
 
-  public reajustarArrayDepndiendoPagina(): void {}
-
   private cargarHookasGenerales(): void {
     this.peticionCargaHookasTerminada = false;
-    this.http
-      .get(
-        `${environment.protocol}://${
-          environment.host + ':' + environment.port
-        }/sites`
-      )
-      .subscribe(
-        (data: Array<Site>) => {
-          this.peticionCargaHookasTerminada = true;
-          let res = data.reduce((prev, current, index) => {
-            prev.push(
-              ...current.data.map((entry: HookasWithSiteMetadata) => {
-                entry.logoCompany = current.logo;
-                entry.nameCompany = current.name;
-                return entry;
-              })
-            );
-            return prev;
-          }, []);
-          this.cachimbas = res;
-          this.copiaCachimbas = cloneDeep(this.cachimbas);
-          this.cachimbas.length = this.MAX_POR_PAGINA;
+    this.http.get(`${environment.protocol}://${environment.host + ':' + environment.port}/sites`).subscribe(
+      (data: Array<Site>) => {
+        this.peticionCargaHookasTerminada = true;
+        let res = data.reduce((prev, current, index) => {
+          prev.push(
+            ...current.data.map((entry: HookasWithSiteMetadata) => {
+              entry.logoCompany = current.logo;
+              entry.nameCompany = current.name;
+              return entry;
+            })
+          );
+          return prev;
+        }, []);
+        this.hookaService.cachimbas = res;
+        this.hookaService.cachimbasSliced = cloneDeep(this.hookaService.cachimbas);
+        this.hookaService.copiaCachimbas = cloneDeep(this.hookaService.cachimbas);
+        this.hookaService.cachimbasSliced.length = this.hookaService.MAX_POR_PAGINA;
+        this.obtainMetadataFromHookas(this.hookaService.cachimbas);
+        this.changeDetectorRef.markForCheck();
+      },
+      (error) => {
+        this.peticionCargaHookasTerminada = true;
+        this.toastr.error('Ha ocurrido un error', error.message);
+        this.changeDetectorRef.markForCheck();
+      }
+    );
+  }
 
-          this.changeDetectorRef.markForCheck();
-        },
-        (error) => {
-          this.peticionCargaHookasTerminada = true;
-          this.toastr.error('Ha ocurrido un error', error);
-        }
-      );
+  private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
+    this.obtainTradeMarkAndModel(hookas);
+  }
+
+  private obtainTradeMarkAndModel(hookas: Array<HookasWithSiteMetadata>) {
+    let objAgrupado = groupBy(hookas, 'marca');
+    this.tradeMarksWithModelsSelectores = cloneDeep(
+      Object.keys(objAgrupado).reduce((prev, current, index) => {
+        prev.push({
+          marca: { clave: current, valor: current.toLowerCase() },
+          modelos: objAgrupado[current].map((entry) => {
+            let modelo = entry.modelo;
+            return { clave: modelo, valor: modelo.toLowerCase() };
+          }),
+        } as ConfiguracionFiltrosAvanzadosMarcas);
+        return prev;
+      }, [])
+    );
   }
 }

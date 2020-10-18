@@ -33,7 +33,7 @@ export class CardViewerComponent implements OnInit {
     {
       icon: 'launch',
       tooltip: 'Abrir pagina',
-      color: 'ternary',
+      color: 'primary',
       action: () => {
         let tabWindowId = window.open('about:blank', '_blank');
         tabWindowId.location.href = this._item.linkProducto;

@@ -1,0 +1,8 @@
+.imagenCentrada {
+  display: flex;
+  justify-content: center;
+  .image {
+    max-height: 150px;
+    max-width: 150px;
+  }
+}

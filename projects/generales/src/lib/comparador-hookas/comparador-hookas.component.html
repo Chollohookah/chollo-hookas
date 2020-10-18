@@ -1,55 +1,38 @@
 <div class="comparadorHookas">
-  <div class="inputComparador">
-    <mat-form-field appearance="fill" *ngIf="_model" class="w-100">
-      <mat-label *ngIf="_model.textoInputAntesDeClickear">{{
-        _model.textoInputAntesDeClickear
-      }}</mat-label>
-      <input
-        *ngIf="_model.placeholderAlComenzarAEscribir"
-        matInput
-        placeholder="{{ _model.placeholderAlComenzarAEscribir }}"
-        #inputBusqueda
-      />
-    </mat-form-field>
-    <mat-icon
-      *ngIf="_model.sufijoIcono"
-      [ngClass]="_model.sufijoIcono.customClass"
-      matSuffix
-      (click)="_model.sufijoIcono.alHacerClick()"
-      >{{ _model.sufijoIcono.nombre }}</mat-icon
-    >
-  </div>
+  <lib-hooka-searcher-input
+    [inputModel]="inputModel"
+    (actualizarDesdeInput)="cambioPaginaPaginador($event.confPaginador, $event.resultadoFiltraje)"
+  ></lib-hooka-searcher-input>
   <div class="filtrosAvanzados">
-    <lib-filtros-avanzados></lib-filtros-avanzados>
+    <lib-filtros-avanzados [setNewTradeMarks]="tradeMarksWithModelsSelectores"></lib-filtros-avanzados>
   </div>
 
   <div class="cargaCachimbas">
-    <lib-cargando-cachimbas
-      *ngIf="!peticionCargaHookasTerminada"
-    ></lib-cargando-cachimbas>
+    <lib-cargando-cachimbas *ngIf="!peticionCargaHookasTerminada"></lib-cargando-cachimbas>
   </div>
 
   <div *ngIf="peticionCargaHookasTerminada">
-    <div class="displayRow my-2">
-      <div
-        *ngFor="let cachimba of cachimbas; let i = index"
-        class="wrapperCompCards"
-      >
-        <lib-card-viewer
-          class="cardItemHooka"
-          [index]="i"
-          [item]="cachimba"
-        ></lib-card-viewer>
+    <ng-container *ngIf="hookaService.cachimbas.length > 0; else sinCachimbas">
+      <div class="displayRow my-2">
+        <div *ngFor="let cachimba of hookaService.cachimbasSliced; let i = index" class="wrapperCompCards">
+          <lib-card-viewer class="cardItemHooka" [index]="i" [item]="cachimba"></lib-card-viewer>
+        </div>
       </div>
-    </div>
-    <div class="paginadorComp">
-      <mat-paginator
-        [length]="copiaCachimbas.length"
-        [pageSize]="MAX_POR_PAGINA"
-        [pageSizeOptions]="MAX_POR_PAGINA_POSIBILIDADES"
-        (page)="cambioPaginaPaginador($event)"
-      >
-      </mat-paginator>
-    </div>
+      <div class="paginadorComp">
+        <mat-paginator
+          [length]="hookaService.cachimbas.length"
+          [pageSize]="hookaService.MAX_POR_PAGINA"
+          [pageSizeOptions]="hookaService.MAX_POR_PAGINA_POSIBILIDADES"
+          (page)="cambioPaginaPaginador($event)"
+        >
+        </mat-paginator>
+      </div>
+    </ng-container>
+    <ng-template #sinCachimbas>
+      <div class="imagenCentrada">
+        <img src="assets/smoke-pipe.png" alt="" srcset="" class="image" />
+        <h3>Tocará seguir fumando la pipa de Popeye</h3>
+      </div>
+    </ng-template>
   </div>
 </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import {
   FiltrosAvanzadosModel,
   InitialConfigInputMaterial,
   ClaveValorModel,
+  ConfiguracionFiltrosAvanzadosMarcas,
 } from '../../interfaces/FiltrosAvanzadosModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { HookaService } from '../../services/hooka-service.service';
 export interface FiltrosAplicadosObjModel {
   marca: string;
   modelo: string;
@@ -25,7 +27,13 @@ export interface ConfiguracionComponentes {
   styleUrls: ['./filtros-avanzados.component.scss'],
 })
 export class FiltrosAvanzadosComponent implements OnInit {
-  //Supuesto modelo del backend
+  @Input('setNewTradeMarks') set setNewTradeMarks(data: Array<ConfiguracionFiltrosAvanzadosMarcas>) {
+    if (data && data.length > 0) {
+      this.configuracionFiltrosAvanzados.selectores.marcas = data;
+      this.configuracionesDeSelectores[this.INDICE_MARCA].datos = this.obtainMarks();
+    }
+  }
+
   public configuracionFiltrosAvanzados: FiltrosAvanzadosModel;
   public INDICE_MARCA: number = 0;
   public INDICE_MODELO: number = 1;
@@ -62,11 +70,14 @@ export class FiltrosAvanzadosComponent implements OnInit {
   private filtrosAplicadosFinales: FormGroup;
   private listaEfectosSecundarios: Array<SideEffectsOfEvent> = [];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private hookaservice: HookaService) {
     this.filtrosAplicadosFinales = this.fb.group({
       marca: ['', []],
-      model: ['', []],
+      modelo: ['', []],
       origen: ['', []],
+    });
+    this.filtrosAplicadosFinales.valueChanges.subscribe((data) => {
+      this.hookaservice.filtrosAplicados = data;
     });
   }
 
@@ -75,12 +86,8 @@ export class FiltrosAvanzadosComponent implements OnInit {
       {
         keyId: 'marca',
         callback: (marca: string) => {
-          this.configuracionesDeSelectores[
-            this.INDICE_MODELO
-          ].datos = this.generateModelsSelectorFromTradeMark(marca);
-          this.configuracionesDeSelectores[
-            this.INDICE_MODELO
-          ].configuracionInicial.disabled = false;
+          this.configuracionesDeSelectores[this.INDICE_MODELO].datos = this.generateModelsSelectorFromTradeMark(marca);
+          this.configuracionesDeSelectores[this.INDICE_MODELO].configuracionInicial.disabled = false;
         },
       },
     ];
@@ -126,54 +133,35 @@ export class FiltrosAvanzadosComponent implements OnInit {
         ],
       },
       chipsPickers: {
-        tamanyo: [
-          { texto: 'Pequeña' },
-          { texto: 'Intermedia' },
-          { texto: 'Grande' },
-          { texto: 'Tamaño americano' },
-        ],
+        tamanyo: [{ texto: 'Pequeña' }, { texto: 'Intermedia' }, { texto: 'Grande' }, { texto: 'Tamaño americano' }],
       },
     };
 
-    this.configuracionesDeSelectores[
-      this.INDICE_MARCA
-    ].datos = this.obtainMarks();
+    this.configuracionesDeSelectores[this.INDICE_MARCA].datos = this.obtainMarks();
 
-    this.configuracionesDeSelectores[
-      this.INDICE_ORIGEN
-    ].datos = this.configuracionFiltrosAvanzados.selectores.origen;
+    this.configuracionesDeSelectores[this.INDICE_ORIGEN].datos = this.configuracionFiltrosAvanzados.selectores.origen;
   }
 
   public receiveChangedValue(claveValor: ClaveValorModel) {
     if (this.filtrosAplicadosFinales.get(claveValor.clave)) {
-      this.filtrosAplicadosFinales
-        .get(claveValor.clave)
-        .patchValue(claveValor.valor);
-      let busquedaEfectoSecundario = this.listaEfectosSecundarios.find(
-        (entry) => entry.keyId === claveValor.clave
-      );
+      this.filtrosAplicadosFinales.get(claveValor.clave).patchValue(claveValor.valor);
+      let busquedaEfectoSecundario = this.listaEfectosSecundarios.find((entry) => entry.keyId === claveValor.clave);
       if (busquedaEfectoSecundario) {
         busquedaEfectoSecundario.callback(claveValor.valor);
       }
-      console.log(this.filtrosAplicadosFinales);
     }
   }
 
   public obtainOnlySelectors(): Array<ConfiguracionComponentes> {
-    return this.configuracionesDeSelectores.filter(
-      (entry) => entry.type == 'selector'
-    );
+    return this.configuracionesDeSelectores.filter((entry) => entry.type == 'selector');
   }
 
   public obtainMarks(): Array<ClaveValorModel> {
-    return this.configuracionFiltrosAvanzados.selectores.marcas.map(
-      (entry) => entry.marca
-    );
+    return this.configuracionFiltrosAvanzados.selectores.marcas.map((entry) => entry.marca);
   }
   private generateModelsSelectorFromTradeMark(trademark: string) {
-    return this.configuracionFiltrosAvanzados.selectores.marcas.find(
-      (entry) => entry.marca.valor === trademark
-    ).modelos;
+    return this.configuracionFiltrosAvanzados.selectores.marcas.find((entry) => entry.marca.valor === trademark)
+      .modelos;
   }
 
   private obtainMarksConfig(): InitialConfigInputMaterial {
