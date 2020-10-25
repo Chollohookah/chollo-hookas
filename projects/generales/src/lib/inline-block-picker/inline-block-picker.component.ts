@@ -9,6 +9,7 @@ export interface InlineBlockPicker {
   styleUrls: ['./inline-block-picker.component.scss'],
 })
 export class InlineBlockPickerComponent implements OnInit {
+  @Input() maxItems: number = 10;
   @Input('chipsInput') set chipsInput(data: Array<InlineBlockPicker>) {
     if (data) {
       this._chipsInput = data;

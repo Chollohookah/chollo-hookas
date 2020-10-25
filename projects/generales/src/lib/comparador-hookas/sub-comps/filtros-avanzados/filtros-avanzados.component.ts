@@ -4,10 +4,14 @@ import {
   InitialConfigInputMaterial,
   ClaveValorModel,
   ConfiguracionFiltrosAvanzadosMarcas,
+  FiltrosAvanzadosChipPicker,
 } from '../../interfaces/FiltrosAvanzadosModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HookaService } from '../../services/hooka-service.service';
+import { cloneDeep } from 'lodash-es';
+import { EnvioHookasFiltradas } from '../hooka-searcher-input/interfaces/BasicPaginatorChangeModel';
 export interface FiltrosAplicadosObjModel {
+  inputValue: string;
   marca: string;
   modelo: string;
 }
@@ -33,11 +37,17 @@ export class FiltrosAvanzadosComponent implements OnInit {
       this.configuracionesDeSelectores[this.INDICE_MARCA].datos = this.obtainMarks();
     }
   }
-
+  @Input('setNewChips') set setNewChips(data: FiltrosAvanzadosChipPicker) {
+    if (data) {
+      this.configuracionFiltrosAvanzados.chipsPickers = data;
+    }
+  }
+  @Output() actualizarDesdeSelectores = new EventEmitter<EnvioHookasFiltradas>();
   public configuracionFiltrosAvanzados: FiltrosAvanzadosModel;
   public INDICE_MARCA: number = 0;
   public INDICE_MODELO: number = 1;
   public INDICE_ORIGEN: number = 2;
+  public INDICE_TAGS: number = 3;
   //Configuración selectores
   public configuracionesDeSelectores: Array<ConfiguracionComponentes> = [
     //Marcas
@@ -58,82 +68,50 @@ export class FiltrosAvanzadosComponent implements OnInit {
       datos: [],
       configuracionInicial: this.obtainOrigenConfig(),
     },
-    //Tamanyo
-    {
-      type: 'chip',
-      datos: [],
-      configuracionInicial: this.obtainTamanyoConfig(),
-    },
   ];
 
   //Almacenamiento de datos introducidos p or usuario y hooks
-  private filtrosAplicadosFinales: FormGroup;
   private listaEfectosSecundarios: Array<SideEffectsOfEvent> = [];
 
-  constructor(private fb: FormBuilder, private hookaservice: HookaService) {
-    this.filtrosAplicadosFinales = this.fb.group({
-      marca: ['', []],
-      modelo: ['', []],
-      origen: ['', []],
-    });
-    this.filtrosAplicadosFinales.valueChanges.subscribe((data) => {
-      this.hookaservice.filtrosAplicados = data;
-    });
-  }
+  constructor(private hookaservice: HookaService) {}
 
   ngOnInit(): void {
     this.listaEfectosSecundarios = [
       {
         keyId: 'marca',
-        callback: (marca: string) => {
+        callback: async (marca: string) => {
           this.configuracionesDeSelectores[this.INDICE_MODELO].datos = this.generateModelsSelectorFromTradeMark(marca);
           this.configuracionesDeSelectores[this.INDICE_MODELO].configuracionInicial.disabled = false;
+          this.hookaservice.setFilterPropertyValue('modelo', '');
+          let res: EnvioHookasFiltradas = await this.hookaservice.realizarFiltro();
+          this.actualizarDesdeSelectores.emit(res);
         },
       },
     ];
 
     this.configuracionFiltrosAvanzados = {
       selectores: {
-        marcas: [
-          {
-            marca: { clave: 'Oduman', valor: 'oduman' },
-            modelos: [
-              { clave: 'Modelo Oduman01', valor: 'modelo-oduman01' },
-              { clave: 'Modelo Oduman02', valor: 'modelo-oduman02' },
-            ],
-          },
-          {
-            marca: { clave: 'Kaya', valor: 'kaya' },
-            modelos: [],
-          },
-          {
-            marca: { clave: 'Regal', valor: 'regal' },
-            modelos: [{ clave: 'Model Regal01', valor: 'model-regal01' }],
-          },
-        ],
+        marcas: [],
         origen: [
-          {
+          /* {
             clave: 'Rusas',
             valor: 'rusia',
-            bandera:
-              'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/23px-Flag_of_Russia.svg.png',
+            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/23px-Flag_of_Russia.svg.png',
           },
           {
             clave: 'Brasileñas',
             valor: 'brasil',
-            bandera:
-              'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/22px-Flag_of_Brazil.svg.png',
+            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/22px-Flag_of_Brazil.svg.png',
           },
           {
             clave: 'Tradicionales',
             valor: 'tradicional',
-            bandera:
-              'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/23px-Flag_of_Spain.svg.png',
-          },
+            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/23px-Flag_of_Spain.svg.png',
+          },*/
         ],
       },
       chipsPickers: {
-        tamanyo: [{ texto: 'Pequeña' }, { texto: 'Intermedia' }, { texto: 'Grande' }, { texto: 'Tamaño americano' }],
+        tags: [],
       },
     };
 
@@ -142,13 +120,15 @@ export class FiltrosAvanzadosComponent implements OnInit {
     this.configuracionesDeSelectores[this.INDICE_ORIGEN].datos = this.configuracionFiltrosAvanzados.selectores.origen;
   }
 
-  public receiveChangedValue(claveValor: ClaveValorModel) {
-    if (this.filtrosAplicadosFinales.get(claveValor.clave)) {
-      this.filtrosAplicadosFinales.get(claveValor.clave).patchValue(claveValor.valor);
+  public async receiveChangedValue(claveValor: ClaveValorModel) {
+    if (claveValor.valor && this.hookaservice.filtrosAplicados[claveValor.clave] !== claveValor.valor) {
       let busquedaEfectoSecundario = this.listaEfectosSecundarios.find((entry) => entry.keyId === claveValor.clave);
       if (busquedaEfectoSecundario) {
         busquedaEfectoSecundario.callback(claveValor.valor);
       }
+      this.hookaservice.setFilterPropertyValue(claveValor.clave as any, claveValor.valor);
+      let res: EnvioHookasFiltradas = await this.hookaservice.realizarFiltro();
+      this.actualizarDesdeSelectores.emit(res);
     }
   }
 
@@ -160,8 +140,7 @@ export class FiltrosAvanzadosComponent implements OnInit {
     return this.configuracionFiltrosAvanzados.selectores.marcas.map((entry) => entry.marca);
   }
   private generateModelsSelectorFromTradeMark(trademark: string) {
-    return this.configuracionFiltrosAvanzados.selectores.marcas.find((entry) => entry.marca.valor === trademark)
-      .modelos;
+    return this.configuracionFiltrosAvanzados.selectores.marcas.find((entry) => entry.marca.valor === trademark).modelos;
   }
 
   private obtainMarksConfig(): InitialConfigInputMaterial {
@@ -188,10 +167,10 @@ export class FiltrosAvanzadosComponent implements OnInit {
     };
   }
 
-  private obtainTamanyoConfig(): InitialConfigInputMaterial {
+  private obtainTagsConfig(): InitialConfigInputMaterial {
     return {
-      idKey: 'tamanyo',
-      label: 'Tamaño',
+      idKey: 'tags',
+      label: 'Tags',
       disabled: false,
     };
   }

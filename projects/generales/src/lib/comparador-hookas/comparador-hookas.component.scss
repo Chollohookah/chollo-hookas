@@ -1,10 +1,22 @@
 @import "../../../../../src/variables.scss";
+@import "../../../../../src/app/styles/mixins.scss";
 .paginadorComp {
   .mat-paginator {
-    background-color: transparent;
+    background-color: $secondaryColor;
+    border-radius: 0px 0px 5px 5px;
+  }
+  .mat-paginator-page-size {
+    @include for-phone-only {
+      display: none;
+    }
   }
 }
 .comparadorHookas {
+  .cardItemHooka {
+    .mat-card-header-text {
+      margin: 0px;
+    }
+  }
   .inputComparador {
     width: 100%;
     position: relative;
@@ -44,6 +56,23 @@
       margin: 0px 5px;
       height: auto;
       width: 300px;
+      @include for-phone-only {
+        width: 170px;
+      }
+      @include for-smaller-phones {
+        width: 300px;
+      }
+    }
+  }
+
+  .notFound {
+    h3 {
+      font-size: 4vh;
+      color: $ternaryColor;
+    }
+    h4 {
+      font-size: 2.5vh;
+      color: $secondaryColor;
     }
   }
 }

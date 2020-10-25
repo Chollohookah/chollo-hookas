@@ -1,5 +1,11 @@
 .cardViewer {
   overflow: hidden;
+  .mat-card-title{
+    font-size: 2vh !important;
+  }
+  .mat-card-subtitle{
+    font-size: 1.2vh !important;
+  }
   .imagenHooka {
     width: 200px;
     height: 200px;

@@ -1,13 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ComparadorHookasIconoConfig, ComparadorHookasInputModel } from './interfaces/ComparadorHooksInputModel';
@@ -17,7 +9,7 @@ import { cloneDeep } from 'lodash-es';
 import { PageEvent } from '@angular/material/paginator';
 import { HookaService } from './services/hooka-service.service';
 import { groupBy } from 'lodash-es';
-import { ConfiguracionFiltrosAvanzadosMarcas } from './interfaces/FiltrosAvanzadosModel';
+import { ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from './interfaces/FiltrosAvanzadosModel';
 import { EventEmitter } from '@angular/core';
 import { FiltrosAplicadosObjModel } from './sub-comps/filtros-avanzados/filtros-avanzados.component';
 @Component({
@@ -30,6 +22,7 @@ import { FiltrosAplicadosObjModel } from './sub-comps/filtros-avanzados/filtros-
 export class ComparadorHookasComponent implements OnInit {
   @Input() inputModel: ComparadorHookasInputModel;
   public tradeMarksWithModelsSelectores: Array<ConfiguracionFiltrosAvanzadosMarcas> = [];
+  public tagsChips: FiltrosAvanzadosChipPicker;
 
   public set peticionCargaHookasTerminada(valor: boolean) {
     this._peticionCargaHookasTerminada = valor;
@@ -96,22 +89,7 @@ export class ComparadorHookasComponent implements OnInit {
   }
 
   private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
-    this.obtainTradeMarkAndModel(hookas);
-  }
-
-  private obtainTradeMarkAndModel(hookas: Array<HookasWithSiteMetadata>) {
-    let objAgrupado = groupBy(hookas, 'marca');
-    this.tradeMarksWithModelsSelectores = cloneDeep(
-      Object.keys(objAgrupado).reduce((prev, current, index) => {
-        prev.push({
-          marca: { clave: current, valor: current.toLowerCase() },
-          modelos: objAgrupado[current].map((entry) => {
-            let modelo = entry.modelo;
-            return { clave: modelo, valor: modelo.toLowerCase() };
-          }),
-        } as ConfiguracionFiltrosAvanzadosMarcas);
-        return prev;
-      }, [])
-    );
+    this.tradeMarksWithModelsSelectores = this.hookaService.obtainTradeMarkAndModel(hookas);
+    this.tagsChips = this.hookaService.obtainTagsFromHookas(hookas);
   }
 }

@@ -1,5 +1,5 @@
 <div class="inputComparador" *ngIf="inputModel">
-  <mat-form-field appearance="fill" *ngIf="inputModel" class="w-100">
+  <mat-form-field appearance="fill" *ngIf="inputModel" class="w-100" (click)="clickInput()">
     <mat-label *ngIf="inputModel.textoInputAntesDeClickear">{{ inputModel.textoInputAntesDeClickear }}</mat-label>
     <input
       *ngIf="inputModel.placeholderAlComenzarAEscribir"

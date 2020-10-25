@@ -11,7 +11,7 @@ export interface FiltrosAvanzadosSelectoresModel {
 }
 
 export interface FiltrosAvanzadosChipPicker {
-  tamanyo: Array<InlineBlockPicker>;
+  tags: Array<InlineBlockPicker>;
 }
 
 export interface ConfiguracionFiltrosAvanzadosMarcas {

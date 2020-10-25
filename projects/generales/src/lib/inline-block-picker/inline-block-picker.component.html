@@ -1,11 +1,12 @@
 <mat-chip-list [multiple]="true">
-  <mat-chip
-    class="bg-secondary text-white"
-    [ngClass]="customCssClass"
-    *ngFor="let chipData of _chipsInput"
-    (click)="
-      chipData.customClickEvent ? chipData.customClickEvent() : emitirClick()
-    "
-    >{{ chipData.texto }}</mat-chip
-  >
+  <ng-container *ngFor="let chipData of _chipsInput; let i = index">
+    <mat-chip
+      *ngIf="i < 10"
+      class="bg-ternary text-white"
+      [ngClass]="customCssClass"
+      (click)="chipData.customClickEvent ? chipData.customClickEvent() : emitirClick()"
+      >{{ chipData.texto }}</mat-chip
+    >
+    <mat-chip class="bg-primary text-secondary" *ngIf="i == 10"><mat-icon>visibility</mat-icon>Ver todas</mat-chip>
+  </ng-container>
 </mat-chip-list>

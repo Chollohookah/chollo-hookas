@@ -21,38 +21,10 @@ export class BaseLandingComponent implements OnInit {
         return true;
       },
       alHacerClick: (context: HookaSearcherInputComponent) => {
-        if (this.modeloInputComparador.estadoAnimacion == 'terminada') {
-          let estadoAnimacion = this.modeloInputComparador.estadoExpansion;
-          this.modeloInputComparador.estadoAnimacion = 'empezada';
-          this.animationController
-            .ejecutarAnimacion(
-              '.filtrosAvanzados',
-              estadoAnimacion == 'abierta'
-                ? { opacity: 0, duration: 500 }
-                : {
-                    height: '100%',
-                    opacity: 1,
-                    duration: 100,
-                  },
-              estadoAnimacion == 'abierta'
-                ? (anim) => {
-                    let item = anim.animatables[0].target as HTMLElement;
-                    item = item.querySelector('.contenedorFiltrosAvanzados');
-                    item.classList.toggle('d-none');
-                    item.classList.remove('d-block');
-                  }
-                : (anim) => {
-                    let item = anim.animatables[0].target as HTMLElement;
-                    item = item.querySelector('.contenedorFiltrosAvanzados');
-                    item.classList.toggle('d-block');
-                    item.classList.remove('d-none');
-                  }
-            )
-            .then((data) => {
-              this.modeloInputComparador.estadoExpansion = estadoAnimacion == 'abierta' ? 'cerrada' : 'abierta';
-              this.modeloInputComparador.estadoAnimacion = 'terminada';
-            });
-        }
+        context.cerrarFiltrosAvanzados.subscribe((data) => {
+          if (this.modeloInputComparador.estadoExpansion == 'abierta') this.triggerVisibilityStatefilters();
+        });
+        this.triggerVisibilityStatefilters();
       },
       customClass: 'c-pointer',
     },
@@ -73,4 +45,39 @@ export class BaseLandingComponent implements OnInit {
   constructor(private animationController: AnimationControllerService) {}
 
   ngOnInit(): void {}
+
+  private triggerVisibilityStatefilters() {
+    if (this.modeloInputComparador.estadoAnimacion == 'terminada') {
+      let estadoAnimacion = this.modeloInputComparador.estadoExpansion;
+      this.modeloInputComparador.estadoAnimacion = 'empezada';
+      this.animationController
+        .ejecutarAnimacion(
+          '.filtrosAvanzados',
+          estadoAnimacion == 'abierta'
+            ? { opacity: 0, duration: 500 }
+            : {
+                height: '100%',
+                opacity: 1,
+                duration: 100,
+              },
+          estadoAnimacion == 'abierta'
+            ? (anim) => {
+                let item = anim.animatables[0].target as HTMLElement;
+                item = item.querySelector('.contenedorFiltrosAvanzados');
+                item.classList.toggle('d-none');
+                item.classList.remove('d-block');
+              }
+            : (anim) => {
+                let item = anim.animatables[0].target as HTMLElement;
+                item = item.querySelector('.contenedorFiltrosAvanzados');
+                item.classList.toggle('d-block');
+                item.classList.remove('d-none');
+              }
+        )
+        .then((data) => {
+          this.modeloInputComparador.estadoExpansion = estadoAnimacion == 'abierta' ? 'cerrada' : 'abierta';
+          this.modeloInputComparador.estadoAnimacion = 'terminada';
+        });
+    }
+  }
 }
