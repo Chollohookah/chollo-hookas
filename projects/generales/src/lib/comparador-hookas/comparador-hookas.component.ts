@@ -12,6 +12,7 @@ import { groupBy } from 'lodash-es';
 import { ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from './interfaces/FiltrosAvanzadosModel';
 import { EventEmitter } from '@angular/core';
 import { FiltrosAplicadosObjModel } from './sub-comps/filtros-avanzados/filtros-avanzados.component';
+import { SliderComponentProps } from '../slider/slider.component';
 @Component({
   selector: 'lib-comparador-hookas',
   templateUrl: './comparador-hookas.component.html',
@@ -23,6 +24,7 @@ export class ComparadorHookasComponent implements OnInit {
   @Input() inputModel: ComparadorHookasInputModel;
   public tradeMarksWithModelsSelectores: Array<ConfiguracionFiltrosAvanzadosMarcas> = [];
   public tagsChips: FiltrosAvanzadosChipPicker;
+  public priceSlider: SliderComponentProps;
 
   public set peticionCargaHookasTerminada(valor: boolean) {
     this._peticionCargaHookasTerminada = valor;
@@ -91,5 +93,6 @@ export class ComparadorHookasComponent implements OnInit {
   private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
     this.tradeMarksWithModelsSelectores = this.hookaService.obtainTradeMarkAndModel(hookas);
     this.tagsChips = this.hookaService.obtainTagsFromHookas(hookas);
+    this.priceSlider= this.hookaService.obtainMininumAndMaxinumPrice(hookas);
   }
 }

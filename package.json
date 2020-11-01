@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~10.0.14",
     "@angular/router": "~10.0.14",
     "@angular/service-worker": "~10.0.14",
+    "@m0t0r/ngx-slider": "^1.0.0",
     "@types/lodash-es": "^4.17.3",
     "animejs": "^3.2.0",
     "bootstrap": "^4.5.2",
@@ -33,6 +34,7 @@
     "ngx-toastr": "^13.0.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
+    "uuid": "^8.3.1",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {

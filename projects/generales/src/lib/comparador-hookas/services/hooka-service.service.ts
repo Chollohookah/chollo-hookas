@@ -7,12 +7,17 @@ import { ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from 
 import { HookasWithSiteMetadata } from '../interfaces/RelationSiteHooka';
 import { FiltrosAplicadosObjModel } from '../sub-comps/filtros-avanzados/filtros-avanzados.component';
 import { EnvioHookasFiltradas } from '../sub-comps/hooka-searcher-input/interfaces/BasicPaginatorChangeModel';
-
+import { v4 as uuidv4 } from 'uuid';
+import { SliderComponentProps } from '../../slider/slider.component';
+import { Options, LabelType } from '@m0t0r/ngx-slider';
 @Injectable({
   providedIn: 'root',
 })
 export class HookaService {
-  public setFilterPropertyValue(property: 'marca' | 'modelo' | 'inputValue', value: any) {
+  public setFilterPropertyValue(
+    property: 'marca' | 'modelo' | 'inputValue' | 'etiquetasSeleccionadas' | 'precioMin' | 'precioMax' | any,
+    value: any
+  ) {
     this.filtrosAplicados[property] = value;
     this.filterValuesChanged.next(this.filtrosAplicados);
   }
@@ -27,6 +32,9 @@ export class HookaService {
     marca: '',
     modelo: '',
     inputValue: '',
+    etiquetasSeleccionadas: [],
+    precioMin: 0,
+    precioMax: 0,
   };
   public cachimbas: Array<HookasWithSiteMetadata> = [];
   public cachimbasSliced: Array<HookasWithSiteMetadata> = [];
@@ -49,15 +57,35 @@ export class HookaService {
               .filter((hookaStringed) => hookaStringed.toLowerCase().includes(busqueda.inputValue.toLowerCase()))
               .map((entry) => JSON.parse(entry));
           }
-
+          //Filtro marca
           if (busqueda.marca && busqueda.marca != '') {
             res = res.filter((entry) => entry.marca.toLowerCase().includes(busqueda.marca.toLowerCase()));
           }
-
+          //Filtro modelo
           if (busqueda.modelo && busqueda.modelo != '') {
             res = res.filter((entry) => entry.modelo.toLowerCase().includes(busqueda.modelo.toLowerCase()));
           }
-
+          //Filtro etiquetas seleccionadas
+          if (busqueda.etiquetasSeleccionadas && busqueda.etiquetasSeleccionadas.length > 0) {
+            res = res.filter((entry) =>
+              entry.etiquetas.some((entry) =>
+                busqueda.etiquetasSeleccionadas.map((entry) => entry.toLowerCase()).includes(entry.toLowerCase())
+              )
+            );
+          }
+          //Filtro precios (rango)
+          if (busqueda.precioMax != undefined && busqueda.precioMin != undefined) {
+            res = res.filter((entry) => {
+              entry.precioOriginal = entry.precioOriginal.replace(/,/g, '.');
+              if (entry.precioOriginal && Number(entry.precioOriginal)) {
+                let precioCachimba = Number(entry.precioOriginal);
+                let precioMin = Number(busqueda.precioMin);
+                let precioMax = Number(busqueda.precioMax);
+                return precioCachimba >= precioMin && precioCachimba <= precioMax ? true : false;
+              }
+              return false;
+            });
+          }
           // @ts-ignore
           this.postMessage({
             filtradas: res,
@@ -112,17 +140,33 @@ export class HookaService {
 
   public obtainTagsFromHookas(hookas: Array<HookasWithSiteMetadata>): FiltrosAvanzadosChipPicker {
     let etiquetasUnificadas = hookas.reduce((prev, current, index) => {
-      prev.push(
-        ...current.etiquetas.map((entry) => {
-          return { texto: entry } as InlineBlockPicker;
-        })
-      );
-      prev = [...new Set(prev)];
+      current.etiquetas.forEach((etiqueta) => {
+        if (!prev.find((entry: string) => entry.toLowerCase() === etiqueta.toLowerCase())) {
+          prev.push(etiqueta);
+        }
+      });
       return prev;
     }, []);
 
     return {
-      tags: etiquetasUnificadas,
+      tags: etiquetasUnificadas.map((entry) => {
+        return { texto: entry, selected: false, id: uuidv4() } as InlineBlockPicker;
+      }),
+    };
+  }
+
+  public obtainMininumAndMaxinumPrice(hookas: Array<HookasWithSiteMetadata>): SliderComponentProps {
+    let arraySoloPrecios = hookas.map((entry) => Number(entry.precioOriginal.replace(/,/g, '.'))).sort();
+    return {
+      value: arraySoloPrecios[0],
+      highValue: arraySoloPrecios[arraySoloPrecios.length - 1],
+      options: {
+        ceil: arraySoloPrecios[arraySoloPrecios.length - 1],
+        floor: arraySoloPrecios[0],
+        translate: (value: number, label: LabelType): string => {
+          return value + '€';
+        },
+      },
     };
   }
 }

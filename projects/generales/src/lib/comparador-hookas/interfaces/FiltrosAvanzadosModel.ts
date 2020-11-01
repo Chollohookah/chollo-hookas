@@ -1,8 +1,10 @@
 import { InlineBlockPicker } from '../../inline-block-picker/inline-block-picker.component';
+import { SliderComponentProps } from '../../slider/slider.component';
 
 export interface FiltrosAvanzadosModel {
   selectores: FiltrosAvanzadosSelectoresModel;
   chipsPickers: FiltrosAvanzadosChipPicker;
+  sliderPrecio: SliderComponentProps;
 }
 
 export interface FiltrosAvanzadosSelectoresModel {
@@ -34,6 +36,7 @@ export interface ConfiguracionTotalSelector {
 export interface ClaveValorModel {
   clave: string;
   valor: any;
+  data?: any;
 }
 
 export interface ClaveValorBandera extends ClaveValorModel {

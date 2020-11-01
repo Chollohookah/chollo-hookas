@@ -10,10 +10,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { HookaService } from '../../services/hooka-service.service';
 import { cloneDeep } from 'lodash-es';
 import { EnvioHookasFiltradas } from '../hooka-searcher-input/interfaces/BasicPaginatorChangeModel';
+import { SliderComponentProps } from '../../../slider/slider.component';
 export interface FiltrosAplicadosObjModel {
   inputValue: string;
   marca: string;
   modelo: string;
+  etiquetasSeleccionadas: Array<string>;
+  precioMin: number;
+  precioMax: number;
 }
 export interface SideEffectsOfEvent {
   keyId: string;
@@ -42,11 +46,17 @@ export class FiltrosAvanzadosComponent implements OnInit {
       this.configuracionFiltrosAvanzados.chipsPickers = data;
     }
   }
+
+  @Input('setNewSlider') set setNewSlider(data: SliderComponentProps) {
+    if (data) {
+      this.configuracionFiltrosAvanzados.sliderPrecio = data;
+    }
+  }
+
   @Output() actualizarDesdeSelectores = new EventEmitter<EnvioHookasFiltradas>();
   public configuracionFiltrosAvanzados: FiltrosAvanzadosModel;
   public INDICE_MARCA: number = 0;
   public INDICE_MODELO: number = 1;
-  public INDICE_ORIGEN: number = 2;
   public INDICE_TAGS: number = 3;
   //Configuración selectores
   public configuracionesDeSelectores: Array<ConfiguracionComponentes> = [
@@ -62,13 +72,13 @@ export class FiltrosAvanzadosComponent implements OnInit {
       datos: [],
       configuracionInicial: this.obtainModelsConfig(),
     },
-    //Origen
-    {
-      type: 'selector',
-      datos: [],
-      configuracionInicial: this.obtainOrigenConfig(),
-    },
   ];
+
+  /* public sliderPrecios: SliderComponentProps = {
+    value: 0,
+    highValue: 100,
+    options: { floor: 0, ceil: 200 },
+  };*/
 
   //Almacenamiento de datos introducidos p or usuario y hooks
   private listaEfectosSecundarios: Array<SideEffectsOfEvent> = [];
@@ -92,32 +102,15 @@ export class FiltrosAvanzadosComponent implements OnInit {
     this.configuracionFiltrosAvanzados = {
       selectores: {
         marcas: [],
-        origen: [
-          /* {
-            clave: 'Rusas',
-            valor: 'rusia',
-            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/23px-Flag_of_Russia.svg.png',
-          },
-          {
-            clave: 'Brasileñas',
-            valor: 'brasil',
-            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/22px-Flag_of_Brazil.svg.png',
-          },
-          {
-            clave: 'Tradicionales',
-            valor: 'tradicional',
-            bandera: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/23px-Flag_of_Spain.svg.png',
-          },*/
-        ],
+        origen: [],
       },
       chipsPickers: {
         tags: [],
       },
+      sliderPrecio: null,
     };
 
     this.configuracionesDeSelectores[this.INDICE_MARCA].datos = this.obtainMarks();
-
-    this.configuracionesDeSelectores[this.INDICE_ORIGEN].datos = this.configuracionFiltrosAvanzados.selectores.origen;
   }
 
   public async receiveChangedValue(claveValor: ClaveValorModel) {
@@ -156,22 +149,6 @@ export class FiltrosAvanzadosComponent implements OnInit {
       idKey: 'modelo',
       label: 'Modelos',
       disabled: true,
-    };
-  }
-
-  private obtainOrigenConfig(): InitialConfigInputMaterial {
-    return {
-      idKey: 'origen',
-      label: 'Origen',
-      disabled: false,
-    };
-  }
-
-  private obtainTagsConfig(): InitialConfigInputMaterial {
-    return {
-      idKey: 'tags',
-      label: 'Tags',
-      disabled: false,
     };
   }
 }

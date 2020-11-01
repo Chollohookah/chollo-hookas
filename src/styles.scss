@@ -1,13 +1,12 @@
 @import "~@angular/material/theming";
 @include mat-core();
 @import "./palettes/palette.scss";
-@import './variables.scss';
-
+@import "./variables.scss";
 
 $theme-colors: (
   "primary": $mainColor,
   "secondary": $secondaryColor,
-  'ternary':$ternaryColor
+  "ternary": $ternaryColor,
 );
 
 @import "node_modules/bootstrap/scss/bootstrap";
@@ -15,13 +14,9 @@ $theme-colors: (
 $hookas-app-primary: mat-palette($md-mcgpalett);
 $hookas-app-accent: mat-palette($md-mcgpalette1);
 $hookas-app-warn: mat-palette($md-mcgpalette2);
-$hookas-app-theme: mat-light-theme(
-  $hookas-app-primary,
-  $hookas-app-accent,
-  $hookas-app-warn
-);
+$hookas-app-theme: mat-light-theme($hookas-app-primary, $hookas-app-accent, $hookas-app-warn);
 @include angular-material-theme($hookas-app-theme);
-@import './app/styles/mixins.scss';
+@import "./app/styles/mixins.scss";
 html,
 body {
   height: 100%;
@@ -31,7 +26,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .c-pointer {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 html,

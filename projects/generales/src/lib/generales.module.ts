@@ -25,6 +25,11 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { getSpanishPaginatorIntl } from '../lib/comparador-hookas/custom-strings-paginator/spanish-paginator-intl';
 import { HookaSearcherInputComponent } from './comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AllTagsViewerComponent } from './comparador-hookas/sub-comps/all-tags-viewer/all-tags-viewer.component';
+import { SliderComponent } from './slider/slider.component';
+import { NgxSliderModule } from '@m0t0r/ngx-slider';
 @NgModule({
   declarations: [
     GeneralesComponent,
@@ -36,6 +41,8 @@ import { HookaSearcherInputComponent } from './comparador-hookas/sub-comps/hooka
     CargandoCachimbasComponent,
     LateralActionsComponent,
     HookaSearcherInputComponent,
+    AllTagsViewerComponent,
+    SliderComponent,
   ],
   imports: [
     CommonModule,
@@ -53,9 +60,15 @@ import { HookaSearcherInputComponent } from './comparador-hookas/sub-comps/hooka
     HttpClientModule,
     ScrollingModule,
     MatCardModule,
+    MatDialogModule,
     MatPaginatorModule,
+    NgxSliderModule
   ],
   exports: [GeneralesComponent, ComparadorHookasComponent],
-  providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} },
+  ],
 })
 export class GeneralesModule {}

@@ -6,11 +6,7 @@ import anime from 'animejs/lib/anime.es.js';
 export class AnimationControllerService {
   constructor() {}
 
-  public ejecutarAnimacion(
-    query: any,
-    propiedadesAnimacion: any,
-    customOnComplete?: Function
-  ) {
+  public ejecutarAnimacion(query: any, propiedadesAnimacion: any, customOnComplete?: Function) {
     return new Promise((resolve, reject) => {
       try {
         let objAnimacion = Object.assign(
@@ -18,7 +14,6 @@ export class AnimationControllerService {
             targets: query,
             duration: 1000,
             complete: (anim) => {
-              console.log(anim)
               if (customOnComplete) customOnComplete(anim);
               resolve(anim);
             },
