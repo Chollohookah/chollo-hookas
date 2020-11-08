@@ -13,6 +13,8 @@ export interface InlineBlockPicker {
   id: string;
   texto: string;
   selected: boolean;
+  iconoA?: string;
+  iconoD?: string;
   customClickEvent?: Function;
   customCss?: string;
 }

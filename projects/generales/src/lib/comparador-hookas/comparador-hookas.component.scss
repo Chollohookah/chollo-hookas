@@ -12,6 +12,7 @@
   }
 }
 .comparadorHookas {
+  position: relative;
   .cardItemHooka {
     .mat-card-header-text {
       margin: 0px;
@@ -30,6 +31,9 @@
       user-select: none;
     }
     .botonLimpiezaInput {
+      right: 7vh;
+    }
+    .botonSort {
       right: 4vh;
     }
   }
@@ -43,12 +47,20 @@
     width: 100%;
   }
 
+  .seleccionOrdenacion {
+    width: auto;
+    position: absolute;
+    z-index: 2;
+    right: 4vh;
+    top: 10px;
+  }
+
   .displayRow {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    height: 600px;
+    height: 70vh;
     overflow: auto;
     .wrapperCompCards {
       position: relative;

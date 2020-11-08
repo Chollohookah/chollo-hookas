@@ -5,6 +5,7 @@ import {
   ClaveValorModel,
   ConfiguracionFiltrosAvanzadosMarcas,
   FiltrosAvanzadosChipPicker,
+  ChecksProps,
 } from '../../interfaces/FiltrosAvanzadosModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HookaService } from '../../services/hooka-service.service';
@@ -18,6 +19,10 @@ export interface FiltrosAplicadosObjModel {
   etiquetasSeleccionadas: Array<string>;
   precioMin: number;
   precioMax: number;
+  ocultarAgotados: boolean;
+  mostrarSoloOfertas: boolean;
+  mostrarListaSeguimiento: boolean;
+  ordenarPrecio: 'ASC' | 'DESC';
 }
 export interface SideEffectsOfEvent {
   keyId: string;
@@ -50,6 +55,12 @@ export class FiltrosAvanzadosComponent implements OnInit {
   @Input('setNewSlider') set setNewSlider(data: SliderComponentProps) {
     if (data) {
       this.configuracionFiltrosAvanzados.sliderPrecio = data;
+    }
+  }
+
+  @Input('setNewChecks') set setNewChecks(data: Array<ChecksProps>) {
+    if (data) {
+      this.configuracionFiltrosAvanzados.checks = data;
     }
   }
 
@@ -108,13 +119,14 @@ export class FiltrosAvanzadosComponent implements OnInit {
         tags: [],
       },
       sliderPrecio: null,
+      checks: [],
     };
 
     this.configuracionesDeSelectores[this.INDICE_MARCA].datos = this.obtainMarks();
   }
 
   public async receiveChangedValue(claveValor: ClaveValorModel) {
-    if (claveValor.valor && this.hookaservice.filtrosAplicados[claveValor.clave] !== claveValor.valor) {
+    if (claveValor.valor != undefined && this.hookaservice.filtrosAplicados[claveValor.clave] !== claveValor.valor) {
       let busquedaEfectoSecundario = this.listaEfectosSecundarios.find((entry) => entry.keyId === claveValor.clave);
       if (busquedaEfectoSecundario) {
         busquedaEfectoSecundario.callback(claveValor.valor);

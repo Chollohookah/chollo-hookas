@@ -6,8 +6,10 @@
       [ngClass]="chipData.customCss ? chipData.customCss : ''"
       #chip
       (click)="chipData.customClickEvent ? chipData.customClickEvent(chipData, chip) : emitirClick(chipData, chip)"
-      >{{ chipData.texto }}</mat-chip
     >
+      <i *ngIf="chipData.iconoA" class="fa {{ chipData.iconoA }}" aria-hidden="true"></i> {{ chipData.texto }}
+      <i *ngIf="chipData.iconoB" class="fa {{ chipData.iconoB }}" aria-hidden="true"></i>
+    </mat-chip>
     <mat-chip class="bg-primary text-secondary c-pointer" *ngIf="i == maxItems" (click)="verTodas()"
       ><mat-icon>visibility</mat-icon> Ver todas</mat-chip
     >

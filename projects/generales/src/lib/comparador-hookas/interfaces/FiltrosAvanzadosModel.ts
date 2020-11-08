@@ -5,6 +5,14 @@ export interface FiltrosAvanzadosModel {
   selectores: FiltrosAvanzadosSelectoresModel;
   chipsPickers: FiltrosAvanzadosChipPicker;
   sliderPrecio: SliderComponentProps;
+  checks: Array<ChecksProps>;
+}
+
+export interface ChecksProps {
+  id: string;
+  texto: string;
+  valor: boolean;
+  disabled: boolean;
 }
 
 export interface FiltrosAvanzadosSelectoresModel {

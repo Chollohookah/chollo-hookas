@@ -6,6 +6,9 @@ import { PosibleActions } from '../lateral-actions/models/PosibleActions';
 import { AnimationControllerService } from '../servicios/animation-controller.service';
 import { AnunciosHookas } from './models/AnunciosHookas';
 import { debounceTime, map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import { v4 as uuidv4 } from 'uuid';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'lib-card-viewer',
   templateUrl: './card-viewer.component.html',
@@ -44,7 +47,20 @@ export class CardViewerComponent implements OnInit {
       tooltip: 'Añadir a  favoritos',
       color: 'danger',
       action: () => {
-        console.log('whoop yo ass');
+        let cookiesKeys = Object.keys(this.cookieService.getAll());
+        let resBusqueda = cookiesKeys.find((entry) => {
+          if (entry.includes('savedHooka')) {
+            if (this.cookieService.getAll()[entry] === this._item.linkProducto) {
+              return entry;
+            }
+          }
+        });
+        if (resBusqueda) {
+          this.toastr.warning(this._item.titulo + ' ya esta agregado en favoritos!', 'No duplicamos cachimbas!');
+        } else {
+          this.toastr.success(this._item.titulo + ' añadido a favoritos!', 'Añadida');
+          this.cookieService.set('savedHooka' + uuidv4(), this._item.linkProducto);
+        }
       },
     },
   ];
@@ -58,7 +74,7 @@ export class CardViewerComponent implements OnInit {
   public animationPromiseStart: Promise<any>;
   private subject: Subject<'in' | 'out'> = new Subject();
 
-  constructor(private animation: AnimationControllerService) {}
+  constructor(private animation: AnimationControllerService, private toastr: ToastrService, private cookieService: CookieService) {}
 
   ngOnInit(): void {
     this.subject.pipe(debounceTime(100)).subscribe((data: 'in' | 'out') => {

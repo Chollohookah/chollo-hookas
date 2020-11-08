@@ -15,6 +15,7 @@ import { BasicPaginatorChangeModel, EnvioHookasFiltradas } from './interfaces/Ba
 export class HookaSearcherInputComponent implements OnInit {
   @Input() inputModel: ComparadorHookasInputModel;
   @Output() actualizarDesdeInput = new EventEmitter<EnvioHookasFiltradas>();
+  @Output() showOrderBox = new EventEmitter<void>();
   @Output() cerrarFiltrosAvanzados = new EventEmitter<void>();
   @ViewChildren('inputBusqueda') inputBusqueda: QueryList<any>;
 

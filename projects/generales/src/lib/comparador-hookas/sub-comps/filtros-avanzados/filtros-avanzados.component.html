@@ -1,4 +1,4 @@
-<div class="contenedorFiltrosAvanzados d-none">
+<div class="contenedorFiltrosAvanzados d-none shadow">
   <div class="d-flex flex-wrap p-3">
     <lib-selector-con-buscador
       class="flex-fill"
@@ -14,6 +14,20 @@
         [config]="configuracionFiltrosAvanzados.sliderPrecio"
         (onSliderChange)="actualizarDesdeSelectores.emit($event)"
       ></lib-slider>
+    </div>
+    <div class="w-100 mb-2" *ngIf="configuracionFiltrosAvanzados.checks">
+      <span>Filtros especificos</span>
+      <mat-divider class="my-2"></mat-divider>
+      <div class="checkboxes">
+        <mat-checkbox
+          color="warn"
+          *ngFor="let check of configuracionFiltrosAvanzados.checks"
+          [disabled]="check.disabled"
+          [(ngModel)]="check.valor"
+          (ngModelChange)="receiveChangedValue({ clave: check.id, valor: check.valor })"
+          >{{ check.texto }}</mat-checkbox
+        >
+      </div>
     </div>
     <div class="w-100">
       <span>Etiquetas</span>

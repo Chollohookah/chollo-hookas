@@ -2,14 +2,22 @@
   <lib-hooka-searcher-input
     [inputModel]="inputModel"
     (actualizarDesdeInput)="cambioPaginaPaginador($event.confPaginador, $event.resultadoFiltraje)"
+    (showOrderBox)="mostrarSortBox = !mostrarSortBox"
   ></lib-hooka-searcher-input>
   <div class="filtrosAvanzados">
     <lib-filtros-avanzados
       [setNewTradeMarks]="tradeMarksWithModelsSelectores"
       [setNewChips]="tagsChips"
       [setNewSlider]="priceSlider"
+      [setNewChecks]="checks"
       (actualizarDesdeSelectores)="cambioPaginaPaginador($event.confPaginador, $event.resultadoFiltraje)"
     ></lib-filtros-avanzados>
+  </div>
+  <div *ngIf="mostrarSortBox" class="seleccionOrdenacion">
+    <lib-inline-block-picker
+      [chipsInput]="sortBlockItem"
+      (chipSelection)="chipSortingSelected($event)"
+    ></lib-inline-block-picker>
   </div>
 
   <div class="cargaCachimbas mt-3">

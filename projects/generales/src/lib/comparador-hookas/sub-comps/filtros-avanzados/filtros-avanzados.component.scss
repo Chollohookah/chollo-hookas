@@ -4,11 +4,20 @@
   height: 100%;
   position: absolute;
   z-index: 1;
-  width: 400px;
+  width: 450px;
   height: auto;
   right: 0;
   border-radius: 0px 0px 0px 5px;
+  padding: 10px;
   lib-selector-con-buscador {
     margin: 1vh 0.5vh;
+  }
+  .checkboxes {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    mat-checkbox {
+      padding: 0px 5px 0px 5px;
+    }
   }
 }

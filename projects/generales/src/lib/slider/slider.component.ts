@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Options, ChangeContext } from '@m0t0r/ngx-slider';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -20,6 +20,7 @@ export interface SliderComponentProps {
   selector: 'lib-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class SliderComponent implements OnInit {
   @Input() set config(config: SliderComponentProps) {

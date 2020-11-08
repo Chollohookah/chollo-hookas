@@ -30,6 +30,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AllTagsViewerComponent } from './comparador-hookas/sub-comps/all-tags-viewer/all-tags-viewer.component';
 import { SliderComponent } from './slider/slider.component';
 import { NgxSliderModule } from '@m0t0r/ngx-slider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CookieService } from 'ngx-cookie-service';
 @NgModule({
   declarations: [
     GeneralesComponent,
@@ -59,16 +61,18 @@ import { NgxSliderModule } from '@m0t0r/ngx-slider';
     MatDividerModule,
     HttpClientModule,
     ScrollingModule,
+    MatCheckboxModule,
     MatCardModule,
     MatDialogModule,
     MatPaginatorModule,
-    NgxSliderModule
+    NgxSliderModule,
   ],
   exports: [GeneralesComponent, ComparadorHookasComponent],
   providers: [
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
+    CookieService,
   ],
 })
 export class GeneralesModule {}

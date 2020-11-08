@@ -9,10 +9,17 @@ import { cloneDeep } from 'lodash-es';
 import { PageEvent } from '@angular/material/paginator';
 import { HookaService } from './services/hooka-service.service';
 import { groupBy } from 'lodash-es';
-import { ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from './interfaces/FiltrosAvanzadosModel';
+import {
+  ChecksProps,
+  ClaveValorModel,
+  ConfiguracionFiltrosAvanzadosMarcas,
+  FiltrosAvanzadosChipPicker,
+} from './interfaces/FiltrosAvanzadosModel';
 import { EventEmitter } from '@angular/core';
 import { FiltrosAplicadosObjModel } from './sub-comps/filtros-avanzados/filtros-avanzados.component';
 import { SliderComponentProps } from '../slider/slider.component';
+import { InlineBlockPicker } from '../inline-block-picker/inline-block-picker.component';
+import { EnvioHookasFiltradas } from './sub-comps/hooka-searcher-input/interfaces/BasicPaginatorChangeModel';
 @Component({
   selector: 'lib-comparador-hookas',
   templateUrl: './comparador-hookas.component.html',
@@ -25,6 +32,11 @@ export class ComparadorHookasComponent implements OnInit {
   public tradeMarksWithModelsSelectores: Array<ConfiguracionFiltrosAvanzadosMarcas> = [];
   public tagsChips: FiltrosAvanzadosChipPicker;
   public priceSlider: SliderComponentProps;
+  public checks: Array<ChecksProps>;
+  public mostrarSortBox: boolean = true;
+  public ordenarPor: string = 'precio';
+  public tipoOrdenacion: 'ASC' | 'DESC' = 'ASC';
+  public sortBlockItem: Array<InlineBlockPicker> = [{ id: '', texto: 'Precio', selected: false, iconoA: 'fa-sort-amount-asc' }];
 
   public set peticionCargaHookasTerminada(valor: boolean) {
     this._peticionCargaHookasTerminada = valor;
@@ -44,6 +56,15 @@ export class ComparadorHookasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarHookasGenerales();
+  }
+
+  public async chipSortingSelected(data: ClaveValorModel) {
+    this.tipoOrdenacion = this.tipoOrdenacion == 'ASC' ? 'DESC' : 'ASC';
+    this.sortBlockItem[0].iconoA = this.tipoOrdenacion == 'DESC' ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
+    this.hookaService.setFilterPropertyValue('ordenarPrecio', this.tipoOrdenacion);
+    let res: EnvioHookasFiltradas = await this.hookaService.realizarFiltro();
+    this.cambioPaginaPaginador(res.confPaginador as any, res.resultadoFiltraje);
+    this.changeDetectorRef.markForCheck();
   }
 
   public cambioPaginaPaginador(event: PageEvent, specificArray?: Array<HookasWithSiteMetadata>) {
@@ -93,6 +114,7 @@ export class ComparadorHookasComponent implements OnInit {
   private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
     this.tradeMarksWithModelsSelectores = this.hookaService.obtainTradeMarkAndModel(hookas);
     this.tagsChips = this.hookaService.obtainTagsFromHookas(hookas);
-    this.priceSlider= this.hookaService.obtainMininumAndMaxinumPrice(hookas);
+    this.priceSlider = this.hookaService.obtainMininumAndMaxinumPrice(hookas);
+    this.checks = this.hookaService.returnChecks(hookas);
   }
 }

@@ -3,6 +3,7 @@ import { ComparadorHookasComponent } from 'projects/generales/src/lib/comparador
 import { ComparadorHookasInputModel } from 'projects/generales/src/lib/comparador-hookas/interfaces/ComparadorHooksInputModel';
 import { AnimationControllerService } from '../../../../../projects/generales/src/lib/servicios/animation-controller.service';
 import { HookaSearcherInputComponent } from '../../../../../projects/generales/src/lib/comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
+import { cloneDeep } from 'lodash-es';
 
 @Component({
   selector: 'app-base-landing',
@@ -15,6 +16,17 @@ export class BaseLandingComponent implements OnInit {
     placeholderAlComenzarAEscribir: 'Cachimbas de todo tipo...',
     estadoAnimacion: 'terminada',
     estadoExpansion: 'cerrada',
+    /* iconoSort: {
+      nombre: 'sort_by_alpha',
+      condition: (context) => {
+        return true;
+      },
+      alHacerClick: (context: HookaSearcherInputComponent) => {
+        console.log('me clickaste');
+        context.showOrderBox.emit();
+      },
+      customClass: 'c-pointer botonSort',
+    },*/
     iconoFiltro: {
       nombre: 'filter_list',
       condition: (context) => {
@@ -22,7 +34,9 @@ export class BaseLandingComponent implements OnInit {
       },
       alHacerClick: (context: HookaSearcherInputComponent) => {
         context.cerrarFiltrosAvanzados.subscribe((data) => {
-          if (this.modeloInputComparador.estadoExpansion == 'abierta') this.triggerVisibilityStatefilters();
+          if (this.modeloInputComparador.estadoExpansion == 'abierta') {
+            this.triggerVisibilityStatefilters();
+          }
         });
         this.triggerVisibilityStatefilters();
       },
@@ -76,7 +90,10 @@ export class BaseLandingComponent implements OnInit {
         )
         .then((data) => {
           this.modeloInputComparador.estadoExpansion = estadoAnimacion == 'abierta' ? 'cerrada' : 'abierta';
+          this.modeloInputComparador.iconoFiltro.nombre =
+            this.modeloInputComparador.estadoExpansion == 'abierta' ? 'keyboard_arrow_up' : 'filter_list';
           this.modeloInputComparador.estadoAnimacion = 'terminada';
+          this.modeloInputComparador = cloneDeep(this.modeloInputComparador);
         });
     }
   }

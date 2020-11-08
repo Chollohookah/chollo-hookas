@@ -3,19 +3,31 @@ import { cloneDeep, groupBy } from 'lodash-es';
 import { Subject } from 'rxjs';
 import { InlineBlockPicker } from '../../inline-block-picker/inline-block-picker.component';
 import { InlineWorker } from '../classes/InlineWorker';
-import { ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from '../interfaces/FiltrosAvanzadosModel';
+import { ChecksProps, ConfiguracionFiltrosAvanzadosMarcas, FiltrosAvanzadosChipPicker } from '../interfaces/FiltrosAvanzadosModel';
 import { HookasWithSiteMetadata } from '../interfaces/RelationSiteHooka';
 import { FiltrosAplicadosObjModel } from '../sub-comps/filtros-avanzados/filtros-avanzados.component';
 import { EnvioHookasFiltradas } from '../sub-comps/hooka-searcher-input/interfaces/BasicPaginatorChangeModel';
 import { v4 as uuidv4 } from 'uuid';
 import { SliderComponentProps } from '../../slider/slider.component';
 import { Options, LabelType } from '@m0t0r/ngx-slider';
+import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root',
 })
 export class HookaService {
   public setFilterPropertyValue(
-    property: 'marca' | 'modelo' | 'inputValue' | 'etiquetasSeleccionadas' | 'precioMin' | 'precioMax' | any,
+    property:
+      | 'marca'
+      | 'modelo'
+      | 'inputValue'
+      | 'etiquetasSeleccionadas'
+      | 'precioMin'
+      | 'precioMax'
+      | 'ocultarAgotados'
+      | 'mostrarSoloOfertas'
+      | 'mostrarListaSeguimiento'
+      | 'ordenarPrecio'
+      | any,
     value: any
   ) {
     this.filtrosAplicados[property] = value;
@@ -35,6 +47,10 @@ export class HookaService {
     etiquetasSeleccionadas: [],
     precioMin: 0,
     precioMax: 0,
+    ocultarAgotados: false,
+    mostrarSoloOfertas: false,
+    mostrarListaSeguimiento: false,
+    ordenarPrecio: 'ASC',
   };
   public cachimbas: Array<HookasWithSiteMetadata> = [];
   public cachimbasSliced: Array<HookasWithSiteMetadata> = [];
@@ -44,18 +60,37 @@ export class HookaService {
   public MAX_POR_PAGINA_POSIBILIDADES = [5, 25, this.MAX_POR_PAGINA, 100];
   public refrescarFiltrosAvanzados: Subject<void> = new Subject();
   public filterValuesChanged: Subject<FiltrosAplicadosObjModel> = new Subject();
-  constructor() {}
+  constructor(private cookieService: CookieService) {}
 
   public realizarFiltro(): Promise<EnvioHookasFiltradas> {
     return new Promise((resolve, reject) => {
       const worker = new InlineWorker(() => {
-        const filterHookas = (busqueda: FiltrosAplicadosObjModel, todasCachimbas: Array<HookasWithSiteMetadata>) => {
+        const filterHookas = (busqueda: FiltrosAplicadosObjModel, todasCachimbas: Array<HookasWithSiteMetadata>, objetoCookies: any) => {
           let res = todasCachimbas;
           if (busqueda.inputValue && busqueda.inputValue != '') {
             res = res
               .map((entry) => JSON.stringify(entry))
               .filter((hookaStringed) => hookaStringed.toLowerCase().includes(busqueda.inputValue.toLowerCase()))
               .map((entry) => JSON.parse(entry));
+          }
+          //Filtro agotados
+          if (busqueda.ocultarAgotados != undefined && busqueda.ocultarAgotados === true) {
+            res = res.filter((entry) => entry.agotado == false);
+          }
+          //Filtro solo ofertas
+          if (busqueda.mostrarSoloOfertas != undefined && busqueda.mostrarSoloOfertas == true) {
+            res = res.filter((entry) => entry.precioRebajado != null);
+          }
+          if (busqueda.mostrarListaSeguimiento != undefined && busqueda.mostrarListaSeguimiento == true) {
+            let cookiesKeys = Object.keys(objetoCookies);
+            res = res.filter((entryHooka) => {
+              let resBusqueda = cookiesKeys.find((entry) => {
+                if (entry.includes('savedHooka') && objetoCookies[entry] === entryHooka.linkProducto) {
+                  return entry;
+                }
+              });
+              if (resBusqueda) return true;
+            });
           }
           //Filtro marca
           if (busqueda.marca && busqueda.marca != '') {
@@ -65,6 +100,7 @@ export class HookaService {
           if (busqueda.modelo && busqueda.modelo != '') {
             res = res.filter((entry) => entry.modelo.toLowerCase().includes(busqueda.modelo.toLowerCase()));
           }
+
           //Filtro etiquetas seleccionadas
           if (busqueda.etiquetasSeleccionadas && busqueda.etiquetasSeleccionadas.length > 0) {
             res = res.filter((entry) =>
@@ -74,7 +110,7 @@ export class HookaService {
             );
           }
           //Filtro precios (rango)
-          if (busqueda.precioMax != undefined && busqueda.precioMin != undefined) {
+          if (busqueda.precioMax && busqueda.precioMin) {
             res = res.filter((entry) => {
               entry.precioOriginal = entry.precioOriginal.replace(/,/g, '.');
               if (entry.precioOriginal && Number(entry.precioOriginal)) {
@@ -86,6 +122,22 @@ export class HookaService {
               return false;
             });
           }
+          //ORDENACIONES
+          if (busqueda.ordenarPrecio) {
+            if (busqueda.ordenarPrecio == 'ASC') {
+              res = res.sort((entry, entry2) => {
+                let precioActualA = Number(entry.precioOriginal.replace(/,/g, '.'));
+                let precioActualB = Number(entry2.precioOriginal.replace(/,/g, '.'));
+                return precioActualA - precioActualB;
+              });
+            } else if (busqueda.ordenarPrecio == 'DESC') {
+              res = res.sort((entry, entry2) => {
+                let precioActualA = Number(entry.precioOriginal.replace(/,/g, '.'));
+                let precioActualB = Number(entry2.precioOriginal.replace(/,/g, '.'));
+                return precioActualB - precioActualA;
+              });
+            }
+          }
           // @ts-ignore
           this.postMessage({
             filtradas: res,
@@ -94,13 +146,14 @@ export class HookaService {
 
         // @ts-ignore
         this.onmessage = (evt) => {
-          filterHookas(evt.data.busqueda, evt.data.allShisha);
+          filterHookas(evt.data.busqueda, evt.data.allShisha, evt.data.objetoCookies);
         };
       });
 
       worker.postMessage({
         busqueda: this.filtrosAplicados,
         allShisha: this.copiaCachimbas,
+        objetoCookies: this.cookieService.getAll(),
       });
 
       let subscription = worker.onmessage().subscribe((data) => {
@@ -168,5 +221,13 @@ export class HookaService {
         },
       },
     };
+  }
+
+  public returnChecks(hookas: Array<HookasWithSiteMetadata>): Array<ChecksProps> {
+    return [
+      { id: 'ocultarAgotados', texto: 'Ocultar agotados', valor: false, disabled: false },
+      { id: 'mostrarSoloOfertas', texto: 'Mostrar solo ofertas', valor: false, disabled: false },
+      { id: 'mostrarListaSeguimiento', texto: 'Mostrar solo favoritos', valor: false, disabled: false },
+    ];
   }
 }

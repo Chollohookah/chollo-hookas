@@ -10,6 +10,7 @@ export interface ComparadorHookasInputModel {
   placeholderAlComenzarAEscribir: string;
   iconoFiltro: ComparadorHookasIconoConfig;
   iconoClear: ComparadorHookasIconoConfig;
+  iconoSort?: ComparadorHookasIconoConfig;
 
   estadoAnimacion: 'empezada' | 'terminada';
   estadoExpansion: 'abierta' | 'cerrada';
