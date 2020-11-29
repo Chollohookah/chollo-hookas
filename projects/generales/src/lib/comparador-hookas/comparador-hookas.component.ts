@@ -89,6 +89,7 @@ export class ComparadorHookasComponent implements OnInit {
         let res = data.reduce((prev, current, index) => {
           prev.push(
             ...current.data.map((entry: HookasWithSiteMetadata) => {
+              entry = this.eliminarImpurezas(entry);
               entry.logoCompany = current.logo;
               entry.nameCompany = current.name;
               return entry;
@@ -109,6 +110,18 @@ export class ComparadorHookasComponent implements OnInit {
         this.changeDetectorRef.markForCheck();
       }
     );
+  }
+
+  private eliminarImpurezas(entry: HookasWithSiteMetadata) {
+    if (entry.marca && entry.modelo) {
+      [entry.marca.toLowerCase(), '¡megapack!', '-'].forEach((regexValue) => {
+        let re = new RegExp(regexValue, 'g');
+        entry.modelo = entry.modelo.toLowerCase().replace(re, '').trim();
+      });
+      entry.modelo = entry.modelo.substr(0, 1).toUpperCase() + entry.modelo.substr(1, entry.modelo.length - 1);
+      console.log(entry.modelo);
+    }
+    return entry;
   }
 
   private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {

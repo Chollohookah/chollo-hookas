@@ -71,9 +71,7 @@ export class InlineBlockPickerComponent implements OnInit, InlineBlockerPickerCo
   }
 
   public verTodas() {
-    const dialogRef = this.dialog.open(AllTagsViewerComponent, {
-      width: '50%',
-    });
+    const dialogRef = this.dialog.open(AllTagsViewerComponent, {});
     dialogRef.componentInstance.allTagsViewerConfig = {
       maxItems: 99999999999,
       chipsInput: this._chipsInput,

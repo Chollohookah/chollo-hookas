@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BootstrapColors } from '../card-viewer/models/AnunciosHookas';
 import { PosibleActions } from './models/PosibleActions';
 
@@ -10,7 +10,7 @@ import { PosibleActions } from './models/PosibleActions';
 export class LateralActionsComponent implements OnInit {
   @Input() backgroundColor: BootstrapColors = 'primary';
   @Input() actions: Array<PosibleActions> = [];
-
+  @Output() cerrarComponente = new EventEmitter<void>();
   constructor() {}
 
   ngOnInit(): void {}

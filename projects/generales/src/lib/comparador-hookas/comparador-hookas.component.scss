@@ -1,6 +1,10 @@
 @import "../../../../../src/variables.scss";
 @import "../../../../../src/app/styles/mixins.scss";
 .paginadorComp {
+  @include for-phone-only {
+    position: fixed;
+    width: 100%;
+  }
   .mat-paginator {
     background-color: $secondaryColor;
     border-radius: 0px 0px 5px 5px;
@@ -51,7 +55,7 @@
     width: auto;
     position: absolute;
     z-index: 2;
-    right: 4vh;
+    right: 5vh;
     top: 10px;
   }
 

@@ -32,6 +32,11 @@ import { SliderComponent } from './slider/slider.component';
 import { NgxSliderModule } from '@m0t0r/ngx-slider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CookieService } from 'ngx-cookie-service';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ImgAccordionComponent } from './img-accordion/img-accordion.component';
+import { DescriptionComponent } from './description/description.component';
+import { MatListModule } from '@angular/material/list';
+
 @NgModule({
   declarations: [
     GeneralesComponent,
@@ -45,6 +50,8 @@ import { CookieService } from 'ngx-cookie-service';
     HookaSearcherInputComponent,
     AllTagsViewerComponent,
     SliderComponent,
+    ImgAccordionComponent,
+    DescriptionComponent,
   ],
   imports: [
     CommonModule,
@@ -63,11 +70,14 @@ import { CookieService } from 'ngx-cookie-service';
     ScrollingModule,
     MatCheckboxModule,
     MatCardModule,
+    MatListModule,
+
     MatDialogModule,
     MatPaginatorModule,
     NgxSliderModule,
+    ClipboardModule,
   ],
-  exports: [GeneralesComponent, ComparadorHookasComponent],
+  exports: [GeneralesComponent, ComparadorHookasComponent, ImgAccordionComponent, DescriptionComponent, MatListModule],
   providers: [
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: MAT_DIALOG_DATA, useValue: {} },

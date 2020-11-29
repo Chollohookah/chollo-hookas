@@ -1,10 +1,14 @@
 @import "../../../../../../../src/variables.scss";
+@import "../../../../../../../src/app/styles/mixins.scss";
 .contenedorFiltrosAvanzados {
   background-color: lighten($color: $ternaryColor, $amount: 50%);
   height: 100%;
   position: absolute;
   z-index: 1;
   width: 450px;
+  @include for-phone-only {
+    width: auto !important;
+  }
   height: auto;
   right: 0;
   border-radius: 0px 0px 0px 5px;

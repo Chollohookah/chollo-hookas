@@ -8,3 +8,10 @@
 button:focus {
   outline: 0;
 }
+
+.botonCierre {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}

@@ -1,4 +1,5 @@
 @import "../../../../variables.scss";
+@import "../../../../../src/app/styles/mixins.scss";
 
 .estructuraLanding {
   height: 100%;
@@ -14,8 +15,13 @@
     flex-direction: column;
     height: 100%;
     width: 120vh;
+    .logoEmpresa {
+      @include for-phone-only {
+        display: none;
+      }
+    }
   }
-  .imagenLogo{
-    max-width: 120px;
+  .imagenLogo {
+    max-width: 20vh;
   }
 }

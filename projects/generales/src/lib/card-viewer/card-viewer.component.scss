@@ -1,15 +1,14 @@
 .cardViewer {
   overflow: hidden;
-  .mat-card-title{
+  height: 35vh;
+  .mat-card-title {
     font-size: 2vh !important;
   }
-  .mat-card-subtitle{
+  .mat-card-subtitle {
     font-size: 1.2vh !important;
   }
-  .imagenHooka {
-    width: 200px;
-    height: 200px;
-  }
+
+
   .anuncioCachi {
     position: absolute;
     right: -30px;
@@ -21,29 +20,50 @@
     display: flex;
     justify-content: center;
   }
-  @mixin precio {
+  @mixin bottombar {
     position: absolute;
     bottom: 0px;
-    right: 1vh;
   }
   .precioNormal {
-    @include precio;
+    @include bottombar;
+    right: 1vh;
   }
   .precioRebajado {
-    @include precio;
+    @include bottombar;
+    right: 1vh;
     bottom: 5px;
     h2 {
       margin: 0;
     }
   }
+  .imagenes {
+    @include bottombar;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .colores {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 19vh;
+    position: absolute;
+    top: 80px;
+    .color {
+      width: 20px;
+      height: 20px;
+      margin: 5px 5px 0px 0px;
+      border-radius: 50px;
+      cursor: pointer;
+      &:hover {
+        filter: brightness(1.5);
+      }
+    }
+  }
 }
 
 div[class^="hoverComp-"] {
-  position: absolute;
-  opacity: 0;
-  z-index: 1;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
 }

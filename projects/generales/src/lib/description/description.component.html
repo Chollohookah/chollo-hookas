@@ -1,0 +1,28 @@
+<div *ngIf="hooka">
+  <div class="wrapperEsqueleto">
+    <div>
+      <lib-img-accordion [imagenes]="hooka.fotos && hooka.fotos.length > 0 ? hooka.fotos : [hooka.imagen]"></lib-img-accordion>
+    </div>
+    <div>
+      <img [src]="hooka.logoCompany" alt="" srcset="" />
+      <h2 class="my-2">{{ hooka.titulo }}</h2>
+      <p *ngIf="hooka.shortDesc">{{ hooka.shortDesc }}</p>
+      <div *ngIf="hooka.specs">
+        <h2 class="mb-1">Caracteristicas</h2>
+        <mat-divider> </mat-divider>
+        <mat-list>
+          <mat-list-item *ngFor="let spec of hooka.specs">
+            <mat-icon mat-list-icon>{{ getIconByKey(keys(spec)[0]) }}</mat-icon>
+            <div mat-line>{{ toUpperCaseFirst(keys(spec)[0]) }}</div>
+            <div mat-line>{{ toUpperCaseFirst(spec[keys(spec)[0]]) }}</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div>
+        <s *ngIf="hooka.precioOriginal" >{{ hooka.precioOriginal }}</s>
+        <span *ngIf="!hooka.precioOriginal" >{{ hooka.precioOriginal }}</span>
+        <span *ngIf="hooka.precioRebajado">{{ hooka.precioRebajado }}</span>
+      </div>
+    </div>
+  </div>
+</div>

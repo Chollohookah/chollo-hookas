@@ -11,6 +11,7 @@ export interface Hooka {
   categorias: Array<string>;
   imagen: string;
   cantidad: string;
+  shortDesc: string;
   precioOriginal: string;
   marca: string;
   modelo: string;
@@ -19,4 +20,7 @@ export interface Hooka {
   etiquetas: Array<string>;
   agotado: boolean;
   linkProducto: string;
+  colores: Array<string>;
+  fotos: Array<string>;
+  specs: Array<any>; //[{tamanyo:''},{altura:''},{material:''},{cazoleta:''},{color:''},{incluyeBase:''},{incluyeManguera:''},{tipo:''},{procedencia:''}]
 }

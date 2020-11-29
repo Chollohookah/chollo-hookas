@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { Hooka } from '../comparador-hookas/interfaces/ModeloHookasBack';
 import { HookasWithSiteMetadata } from '../comparador-hookas/interfaces/RelationSiteHooka';
 import { PosibleActions } from '../lateral-actions/models/PosibleActions';
@@ -9,6 +9,9 @@ import { debounceTime, map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { v4 as uuidv4 } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { ImgAccordionComponent } from '../img-accordion/img-accordion.component';
+import { DescriptionComponent } from '../description/description.component';
 @Component({
   selector: 'lib-card-viewer',
   templateUrl: './card-viewer.component.html',
@@ -30,7 +33,7 @@ export class CardViewerComponent implements OnInit {
       color: 'secondary',
       tooltip: 'Más información',
       action: () => {
-        console.log('whoop yo ass');
+        this.dialog.open(DescriptionComponent, { data: this._item });
       },
     },
     {
@@ -69,48 +72,19 @@ export class CardViewerComponent implements OnInit {
   public _item: HookasWithSiteMetadata;
   public anuncioHooka: AnunciosHookas;
 
-  public cargarAnimacionOcultacion: boolean = false;
-  public animacionMostrarTerminada: boolean = true;
-  public animationPromiseStart: Promise<any>;
-  private subject: Subject<'in' | 'out'> = new Subject();
+  public mostrandoOpciones: boolean = false;
 
-  constructor(private animation: AnimationControllerService, private toastr: ToastrService, private cookieService: CookieService) {}
+  constructor(
+    private animation: AnimationControllerService,
+    private dialog: MatDialog,
+    private toastr: ToastrService,
+    private cookieService: CookieService
+  ) {}
 
-  ngOnInit(): void {
-    this.subject.pipe(debounceTime(100)).subscribe((data: 'in' | 'out') => {
-      switch (data) {
-        case 'in':
-          this.haciendoHoverCard();
-          break;
-        case 'out':
-          this.saliendoHoverCard();
-          break;
-      }
-    });
-  }
+  ngOnInit(): void {}
 
-  public nextTransition(v: 'in' | 'out') {
-    this.subject.next(v);
-  }
-
-  public haciendoHoverCard(): void {
-    if (this.animacionMostrarTerminada) {
-      this.animacionMostrarTerminada = false;
-      this.animationPromiseStart = this.animation
-        .ejecutarAnimacion('.hoverComp-' + this._index, {
-          opacity: 1,
-        })
-        .then((data) => {
-          this.animacionMostrarTerminada = true;
-        });
-    }
-  }
-
-  public async saliendoHoverCard() {
-    if (!this.animacionMostrarTerminada) {
-      await this.animationPromiseStart;
-    }
-    this.ocultarOpcionesLaterales();
+  public copiadoAlPortapeles(color: string): void {
+    this.toastr.info(`El color ${color} fue copiado al portapapeles`);
   }
 
   public hayAnuncio() {
@@ -140,13 +114,7 @@ export class CardViewerComponent implements OnInit {
     }
   }
 
-  private ocultarOpcionesLaterales(): void {
-    this.animation
-      .ejecutarAnimacion('.hoverComp-' + this._index, {
-        opacity: 0,
-      })
-      .then((data) => {
-        this.cargarAnimacionOcultacion = false;
-      });
+  public abrirModalImagenes(): void {
+    let imgAccordion = this.dialog.open(ImgAccordionComponent, { data: this._item.fotos });
   }
 }
