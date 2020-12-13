@@ -70,7 +70,6 @@ export class BaseLandingComponent implements OnInit {
           estadoAnimacion == 'abierta'
             ? { opacity: 0, duration: 500 }
             : {
-                height: '100%',
                 opacity: 1,
                 duration: 100,
               },

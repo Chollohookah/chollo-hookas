@@ -2,7 +2,6 @@
 @import "../../../../../src/app/styles/mixins.scss";
 .paginadorComp {
   @include for-phone-only {
-    position: fixed;
     width: 100%;
   }
   .mat-paginator {
@@ -17,7 +16,16 @@
 }
 .comparadorHookas {
   position: relative;
+  height: 100%;
+  overflow: hidden;
+  .wrapperCachimbasPaginador {
+    height: calc(100% - 70.13px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
   .cardItemHooka {
+   
     .mat-card-header-text {
       margin: 0px;
     }
@@ -65,6 +73,9 @@
     flex-wrap: wrap;
     justify-content: space-between;
     height: 70vh;
+    @include for-phone-only {
+      height: 85vh;
+    }
     overflow: auto;
     .wrapperCompCards {
       position: relative;

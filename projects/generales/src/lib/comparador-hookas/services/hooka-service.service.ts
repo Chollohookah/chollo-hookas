@@ -209,7 +209,8 @@ export class HookaService {
   }
 
   public obtainMininumAndMaxinumPrice(hookas: Array<HookasWithSiteMetadata>): SliderComponentProps {
-    let arraySoloPrecios = hookas.map((entry) => Number(entry.precioOriginal.replace(/,/g, '.'))).sort();
+    let arraySoloPrecios = hookas.map((entry) => Number(entry.precioOriginal.replace(/,/g, '.'))).filter((entry) => !Number.isNaN(entry));
+    arraySoloPrecios = arraySoloPrecios.sort((a, b) => a - b);
     return {
       value: arraySoloPrecios[0],
       highValue: arraySoloPrecios[arraySoloPrecios.length - 1],

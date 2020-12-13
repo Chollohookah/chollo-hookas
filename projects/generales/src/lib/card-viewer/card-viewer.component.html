@@ -1,8 +1,8 @@
-<div>
+<div [ngClass]="{ 'h-100': mostrandoOpciones }">
   <mat-card class="cardViewer" *ngIf="_item" [ngClass]="{ 'p-0': mostrandoOpciones }">
     <ng-container *ngIf="!mostrandoOpciones; else plantillaOpciones">
       <mat-card-header>
-        <mat-card-title>{{ _item.modelo }}</mat-card-title>
+        <mat-card-title>{{ _item.titulo }}</mat-card-title>
         <mat-card-subtitle>{{ _item.marca }}</mat-card-subtitle>
         <div class="anuncioCachi bg-{{ anuncioHooka.color }} text-{{ anuncioHooka.textColor }}" *ngIf="hayAnuncio()">
           {{ anuncioHooka.texto }}
@@ -11,7 +11,14 @@
 
       <mat-card-content class="contenidoCard">
         <div (click)="mostrandoOpciones = true">
-          <img src="{{ _item.imagen }}" onerror="this.src = 'assets/no-camera.png';" alt="" srcset="" class="imagenHooka img-fluid" />
+          <img
+            loading="lazy"
+            src="{{ _item.imagen }}"
+            onerror="this.src = 'assets/no-camera.png';"
+            alt=""
+            srcset=""
+            class="imagenHooka img-fluid"
+          />
         </div>
       </mat-card-content>
       <div class="imagenes" *ngIf="_item.fotos && _item.fotos.length > 0" (click)="abrirModalImagenes()">

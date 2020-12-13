@@ -3,7 +3,7 @@ import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy, C
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ComparadorHookasIconoConfig, ComparadorHookasInputModel } from './interfaces/ComparadorHooksInputModel';
-import { Site, Hooka } from './interfaces/ModeloHookasBack';
+import { Site, Hooka, Block } from './interfaces/ModeloHookasBack';
 import { HookasWithSiteMetadata } from './interfaces/RelationSiteHooka';
 import { cloneDeep } from 'lodash-es';
 import { PageEvent } from '@angular/material/paginator';
@@ -83,33 +83,51 @@ export class ComparadorHookasComponent implements OnInit {
 
   private cargarHookasGenerales(): void {
     this.peticionCargaHookasTerminada = false;
-    this.http.get(`${environment.protocol}://${environment.host + ':' + environment.port}/sites`).subscribe(
-      (data: Array<Site>) => {
-        this.peticionCargaHookasTerminada = true;
-        let res = data.reduce((prev, current, index) => {
-          prev.push(
-            ...current.data.map((entry: HookasWithSiteMetadata) => {
-              entry = this.eliminarImpurezas(entry);
-              entry.logoCompany = current.logo;
-              entry.nameCompany = current.name;
-              return entry;
-            })
-          );
-          return prev;
-        }, []);
-        this.hookaService.cachimbas = res;
-        this.hookaService.cachimbasSliced = cloneDeep(this.hookaService.cachimbas);
-        this.hookaService.copiaCachimbas = cloneDeep(this.hookaService.cachimbas);
-        this.hookaService.cachimbasSliced.length = this.hookaService.MAX_POR_PAGINA;
-        this.obtainMetadataFromHookas(this.hookaService.cachimbas);
-        this.changeDetectorRef.markForCheck();
-      },
-      (error) => {
-        this.peticionCargaHookasTerminada = true;
-        this.toastr.error('Ha ocurrido un error', error.message);
-        this.changeDetectorRef.markForCheck();
-      }
-    );
+    let filter = {
+      order: 'dateBlock desc',
+      include: [
+        {
+          relation: 'minedIds',
+          scope: {
+            include: [{ relation: 'data' }],
+          },
+        },
+      ],
+    };
+    this.http
+      .get(
+        `${environment.protocol}://${environment.host + ':' + environment.port}/blocks/latestBlock?filter=${encodeURIComponent(
+          JSON.stringify(filter)
+        )}`
+      )
+      .subscribe(
+        (blockData: Block) => {
+          this.peticionCargaHookasTerminada = true;
+          let data = blockData.minedIds;
+          let res = data.reduce((prev, current, index) => {
+            prev.push(
+              ...current.data.map((entry: HookasWithSiteMetadata) => {
+                entry = this.eliminarImpurezas(entry);
+                entry.logoCompany = current.logo;
+                entry.nameCompany = current.name;
+                return entry;
+              })
+            );
+            return prev;
+          }, []);
+          this.hookaService.cachimbas = res;
+          this.hookaService.cachimbasSliced = cloneDeep(this.hookaService.cachimbas);
+          this.hookaService.copiaCachimbas = cloneDeep(this.hookaService.cachimbas);
+          this.hookaService.cachimbasSliced.length = this.hookaService.MAX_POR_PAGINA;
+          this.obtainMetadataFromHookas(this.hookaService.cachimbas);
+          this.changeDetectorRef.markForCheck();
+        },
+        (error) => {
+          this.peticionCargaHookasTerminada = true;
+          this.toastr.error('Ha ocurrido un error', error.message);
+          this.changeDetectorRef.markForCheck();
+        }
+      );
   }
 
   private eliminarImpurezas(entry: HookasWithSiteMetadata) {
@@ -119,7 +137,7 @@ export class ComparadorHookasComponent implements OnInit {
         entry.modelo = entry.modelo.toLowerCase().replace(re, '').trim();
       });
       entry.modelo = entry.modelo.substr(0, 1).toUpperCase() + entry.modelo.substr(1, entry.modelo.length - 1);
-      console.log(entry.modelo);
+     // console.log(entry.modelo);
     }
     return entry;
   }

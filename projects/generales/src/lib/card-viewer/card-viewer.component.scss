@@ -1,13 +1,12 @@
 .cardViewer {
   overflow: hidden;
-  height: 35vh;
+  height: 100%;
   .mat-card-title {
     font-size: 2vh !important;
   }
   .mat-card-subtitle {
     font-size: 1.2vh !important;
   }
-
 
   .anuncioCachi {
     position: absolute;
@@ -42,6 +41,10 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+
+    img.ng-lazyloaded {
+      opacity: 1;
+    }
   }
   .colores {
     display: flex;

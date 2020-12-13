@@ -33,6 +33,7 @@
     "lodash-es": "^4.17.15",
     "ngx-cookie-service": "^10.1.1",
     "ngx-toastr": "^13.0.1",
+    "popper.js": "^1.16.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "uuid": "^8.3.1",

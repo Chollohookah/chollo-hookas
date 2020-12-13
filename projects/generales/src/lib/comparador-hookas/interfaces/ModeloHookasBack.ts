@@ -1,3 +1,12 @@
+
+export interface Block{
+  id:string;
+  dateBLock:Date;
+  statuses:Object;
+  minedIds:Array<Site>;
+}
+
+
 export interface Site {
   id: string;
   lastUpdate: Date;

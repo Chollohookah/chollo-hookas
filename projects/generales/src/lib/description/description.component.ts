@@ -48,4 +48,9 @@ export class DescriptionComponent implements OnInit {
         return '';
     }
   }
+
+  public goLink() {
+    let tabWindowId = window.open('about:blank', '_blank');
+    tabWindowId.location.href = this.hooka.linkProducto;
+  }
 }

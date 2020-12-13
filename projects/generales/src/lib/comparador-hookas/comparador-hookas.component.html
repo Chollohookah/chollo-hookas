@@ -24,7 +24,7 @@
     <lib-cargando-cachimbas *ngIf="!peticionCargaHookasTerminada"></lib-cargando-cachimbas>
   </div>
 
-  <div *ngIf="peticionCargaHookasTerminada">
+  <div *ngIf="peticionCargaHookasTerminada" class="wrapperCachimbasPaginador">
     <ng-container *ngIf="hookaService.cachimbas.length > 0; else sinCachimbas">
       <div class="displayRow my-2">
         <div *ngFor="let cachimba of hookaService.cachimbasSliced; let i = index" class="wrapperCompCards">
