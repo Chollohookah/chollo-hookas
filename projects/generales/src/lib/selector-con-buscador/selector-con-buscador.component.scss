@@ -1,4 +1,4 @@
-@import '../../../../../src/variables.scss';
+@import "../../../../../src/variables.scss";
 
 .selectorPadre {
   width: 100%;
@@ -7,7 +7,22 @@
   z-index: 1;
   top: 0;
   background-color: $secondaryColor;
-  .mat-form-field-wrapper{
+  .mat-form-field-wrapper {
     margin-bottom: -18px;
+  }
+}
+
+.wrapperOpcion {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputLevelWrapper {
+  position: relative;
+  .iconoEliminarSeleccionado {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    cursor: pointer;
   }
 }

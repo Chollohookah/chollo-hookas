@@ -25,6 +25,7 @@ export class SelectorConBuscadorComponent implements OnInit {
 
   @Input('entradaSelector') set entradaSelector(arrayDatos: Array<ClaveValorBandera>) {
     if (arrayDatos && arrayDatos instanceof Array && arrayDatos.length > 0) {
+      if (arrayDatos.length == 1) this.formularioBusqueda.get('itemSeleccionado').patchValue(arrayDatos[0].valor);
       this.arrayDatos = cloneDeep(arrayDatos);
       this.arrayDatosClone = cloneDeep(this.arrayDatos);
       this.yesData();
@@ -36,33 +37,40 @@ export class SelectorConBuscadorComponent implements OnInit {
   public initialConfigObj: InitialConfigInputMaterial;
   public arrayDatos: Array<ClaveValorModel> = [];
   private arrayDatosClone: Array<ClaveValorModel> = [];
+  public latestStatus: 'hadData' | 'didntHave' = null;
   @Output('selectedValueChanged') selectedValueChanged = new EventEmitter<any>();
 
   public formularioBusqueda: FormGroup;
 
   constructor(private fb: FormBuilder, private hookaService: HookaService) {
-    this.hookaService.filterValuesChanged.subscribe((data) => {
-      this.formularioBusqueda.patchValue({ itemSeleccionado: data[this.initialConfigObj.idKey] });
-    });
+    /*this.hookaService.filterValuesChanged.subscribe((data) => {
+      this.formularioBusqueda.patchValue({ itemSeleccionado: this.initialConfigObj ? data[this.initialConfigObj.idKey] : '' });
+    });*/
     this.formularioBusqueda = this.fb.group({
       busqueda: ['', []],
       itemSeleccionado: [null, []],
     });
     this.noData();
     this.listenFormKeysWithCallbacksOnTrigger('busqueda', (valor: string) => {
-      this.arrayDatos = cloneDeep(this.arrayDatosClone.filter((entry) => entry.clave.toLowerCase().includes(valor.toLowerCase())));
+      if (valor) {
+        this.arrayDatos = cloneDeep(this.arrayDatosClone.filter((entry) => entry.clave.toLowerCase().includes(valor.toLowerCase())));
+      } else {
+        this.arrayDatos = cloneDeep(this.arrayDatosClone);
+      }
     });
     this.listenFormKeysWithCallbacksOnTrigger('itemSeleccionado', (valor: string) => {
-      if (valor != null) {
-        this.selectedValueChanged.emit({
-          clave: this.initialConfigObj.idKey,
-          valor,
-        } as ClaveValorModel);
-      }
+      this.selectedValueChanged.emit({
+        clave: this.initialConfigObj ? this.initialConfigObj.idKey : '',
+        valor,
+      } as ClaveValorModel);
     });
   }
 
   ngOnInit(): void {}
+
+  public removeSelection() {
+    this.formularioBusqueda.reset();
+  }
 
   private listenFormKeysWithCallbacksOnTrigger(keyName: string, callback: Function) {
     this.formularioBusqueda.get(keyName).valueChanges.subscribe((data) => {
@@ -71,13 +79,17 @@ export class SelectorConBuscadorComponent implements OnInit {
   }
 
   private yesData(): void {
+    if (this.latestStatus == 'hadData') return;
     this.formularioBusqueda.get('itemSeleccionado').enable();
     this.formularioBusqueda.get('busqueda').enable();
+    this.latestStatus = 'hadData';
   }
 
   private noData(): void {
+    if (this.latestStatus == 'didntHave') return;
     this.formularioBusqueda.get('itemSeleccionado').reset();
     this.formularioBusqueda.get('itemSeleccionado').disable();
     this.formularioBusqueda.get('busqueda').disable();
+    this.latestStatus = 'didntHave';
   }
 }

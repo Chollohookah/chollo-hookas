@@ -1,7 +1,7 @@
 <div class="comparadorHookas">
   <lib-hooka-searcher-input
     [inputModel]="inputModel"
-    (actualizarDesdeInput)="cambioPaginaPaginador($event.confPaginador, $event.resultadoFiltraje)"
+    (actualizarDesdeInput)="obtainMetadataFromHookas($event.resultadoFiltraje);cambioPaginaPaginador($event.confPaginador, $event.resultadoFiltraje)"
     (showOrderBox)="mostrarSortBox = !mostrarSortBox"
   ></lib-hooka-searcher-input>
   <div class="filtrosAvanzados">

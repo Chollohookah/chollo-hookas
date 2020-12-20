@@ -1,11 +1,9 @@
-
-export interface Block{
-  id:string;
-  dateBLock:Date;
-  statuses:Object;
-  minedIds:Array<Site>;
+export interface Block {
+  id: string;
+  dateBLock: Date;
+  statuses: Object;
+  minedIds: Array<Site>;
 }
-
 
 export interface Site {
   id: string;
@@ -21,7 +19,7 @@ export interface Hooka {
   imagen: string;
   cantidad: string;
   shortDesc: string;
-  precioOriginal: string;
+  precioOriginal: string | number;
   marca: string;
   modelo: string;
   titulo: string;

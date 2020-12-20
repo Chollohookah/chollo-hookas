@@ -105,6 +105,7 @@ export class FiltrosAvanzadosComponent implements OnInit {
           this.configuracionesDeSelectores[this.INDICE_MODELO].configuracionInicial.disabled = false;
           this.hookaservice.setFilterPropertyValue('modelo', '');
           let res: EnvioHookasFiltradas = await this.hookaservice.realizarFiltro();
+          console.log('AQUI', res);
           this.actualizarDesdeSelectores.emit(res);
         },
       },
@@ -126,10 +127,12 @@ export class FiltrosAvanzadosComponent implements OnInit {
   }
 
   public async receiveChangedValue(claveValor: ClaveValorModel) {
-    if (claveValor.valor != undefined && this.hookaservice.filtrosAplicados[claveValor.clave] !== claveValor.valor) {
+    if (this.hookaservice.filtrosAplicados[claveValor.clave] !== claveValor.valor) {
       let busquedaEfectoSecundario = this.listaEfectosSecundarios.find((entry) => entry.keyId === claveValor.clave);
       if (busquedaEfectoSecundario) {
-        busquedaEfectoSecundario.callback(claveValor.valor);
+        setTimeout(() => {
+          busquedaEfectoSecundario.callback(claveValor.valor);
+        }, 100);
       }
       this.hookaservice.setFilterPropertyValue(claveValor.clave as any, claveValor.valor);
       let res: EnvioHookasFiltradas = await this.hookaservice.realizarFiltro();
@@ -142,10 +145,33 @@ export class FiltrosAvanzadosComponent implements OnInit {
   }
 
   public obtainMarks(): Array<ClaveValorModel> {
-    return this.configuracionFiltrosAvanzados.selectores.marcas.map((entry) => entry.marca);
+    let marcas = this.configuracionFiltrosAvanzados.selectores.marcas
+      .map((entry) => entry.marca)
+      .filter((entryFilter) => {
+        function isValid(value: Array<string>) {
+          return value.every((entryEvery) => {
+            return entryEvery != '' && entryEvery != null && entryEvery != undefined;
+          });
+        }
+        return isValid([entryFilter.clave, entryFilter.valor]);
+      })
+      .sort((a, b) => {
+        if (a.clave < b.clave) {
+          return -1;
+        }
+        if (a.clave > b.clave) {
+          return 1;
+        }
+        return 0;
+      });
+    return marcas;
   }
   private generateModelsSelectorFromTradeMark(trademark: string) {
-    return this.configuracionFiltrosAvanzados.selectores.marcas.find((entry) => entry.marca.valor === trademark).modelos;
+    let busquedaModelos = this.configuracionFiltrosAvanzados.selectores.marcas.find((entry) => entry.marca.valor === trademark);
+    if (busquedaModelos) {
+      return busquedaModelos.modelos;
+    }
+    return [];
   }
 
   private obtainMarksConfig(): InitialConfigInputMaterial {

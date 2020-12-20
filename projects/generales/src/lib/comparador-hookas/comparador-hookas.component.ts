@@ -36,6 +36,7 @@ export class ComparadorHookasComponent implements OnInit {
   public mostrarSortBox: boolean = true;
   public ordenarPor: string = 'precio';
   public tipoOrdenacion: 'ASC' | 'DESC' = 'ASC';
+  public MININUM_PRICE_HOOKA: number = 50;
   public sortBlockItem: Array<InlineBlockPicker> = [{ id: '', texto: 'Precio', selected: false, iconoA: 'fa-sort-amount-asc' }];
 
   public set peticionCargaHookasTerminada(valor: boolean) {
@@ -106,12 +107,17 @@ export class ComparadorHookasComponent implements OnInit {
           let data = blockData.minedIds;
           let res = data.reduce((prev, current, index) => {
             prev.push(
-              ...current.data.map((entry: HookasWithSiteMetadata) => {
-                entry = this.eliminarImpurezas(entry);
-                entry.logoCompany = current.logo;
-                entry.nameCompany = current.name;
-                return entry;
-              })
+              ...current.data
+                .map((entry: HookasWithSiteMetadata) => {
+                  entry = this.eliminarImpurezas(entry);
+                  entry.logoCompany = current.logo;
+                  entry.nameCompany = current.name;
+                  entry.precioOriginal = Number((entry.precioOriginal as string).replace(/,/g, '.')) as any;
+                  return entry;
+                })
+                .filter((filterEntry) => {
+                  return !Number.isNaN(filterEntry.precioOriginal) && filterEntry.precioOriginal > this.MININUM_PRICE_HOOKA;
+                })
             );
             return prev;
           }, []);
@@ -137,12 +143,11 @@ export class ComparadorHookasComponent implements OnInit {
         entry.modelo = entry.modelo.toLowerCase().replace(re, '').trim();
       });
       entry.modelo = entry.modelo.substr(0, 1).toUpperCase() + entry.modelo.substr(1, entry.modelo.length - 1);
-     // console.log(entry.modelo);
     }
     return entry;
   }
 
-  private obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
+  public obtainMetadataFromHookas(hookas: Array<HookasWithSiteMetadata>) {
     this.tradeMarksWithModelsSelectores = this.hookaService.obtainTradeMarkAndModel(hookas);
     this.tagsChips = this.hookaService.obtainTagsFromHookas(hookas);
     this.priceSlider = this.hookaService.obtainMininumAndMaxinumPrice(hookas);

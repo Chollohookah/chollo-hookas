@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SliderComponentProps } from '../../slider/slider.component';
 import { Options, LabelType } from '@m0t0r/ngx-slider';
 import { CookieService } from 'ngx-cookie-service';
+import { flatten, isGoodTag } from '../../functions/functions';
 @Injectable({
   providedIn: 'root',
 })
@@ -112,7 +113,7 @@ export class HookaService {
           //Filtro precios (rango)
           if (busqueda.precioMax && busqueda.precioMin) {
             res = res.filter((entry) => {
-              entry.precioOriginal = entry.precioOriginal.replace(/,/g, '.');
+              entry.precioOriginal = entry.precioOriginal as number;
               if (entry.precioOriginal && Number(entry.precioOriginal)) {
                 let precioCachimba = Number(entry.precioOriginal);
                 let precioMin = Number(busqueda.precioMin);
@@ -126,14 +127,14 @@ export class HookaService {
           if (busqueda.ordenarPrecio) {
             if (busqueda.ordenarPrecio == 'ASC') {
               res = res.sort((entry, entry2) => {
-                let precioActualA = Number(entry.precioOriginal.replace(/,/g, '.'));
-                let precioActualB = Number(entry2.precioOriginal.replace(/,/g, '.'));
+                let precioActualA = entry.precioOriginal as number;
+                let precioActualB = entry2.precioOriginal as number;
                 return precioActualA - precioActualB;
               });
             } else if (busqueda.ordenarPrecio == 'DESC') {
               res = res.sort((entry, entry2) => {
-                let precioActualA = Number(entry.precioOriginal.replace(/,/g, '.'));
-                let precioActualB = Number(entry2.precioOriginal.replace(/,/g, '.'));
+                let precioActualB = entry2.precioOriginal as number;
+                let precioActualA = entry.precioOriginal as number;
                 return precioActualB - precioActualA;
               });
             }
@@ -194,13 +195,16 @@ export class HookaService {
   public obtainTagsFromHookas(hookas: Array<HookasWithSiteMetadata>): FiltrosAvanzadosChipPicker {
     let etiquetasUnificadas = hookas.reduce((prev, current, index) => {
       current.etiquetas.forEach((etiqueta) => {
-        if (!prev.find((entry: string) => entry.toLowerCase() === etiqueta.toLowerCase())) {
+        if (
+          !prev.find((entry: string) => entry.toLowerCase() === etiqueta.toLowerCase() || entry.includes(etiqueta)) &&
+          etiqueta.length <= 10 &&
+          isGoodTag(etiqueta)
+        ) {
           prev.push(etiqueta);
         }
       });
       return prev;
     }, []);
-
     return {
       tags: etiquetasUnificadas.map((entry) => {
         return { texto: entry, selected: false, id: uuidv4() } as InlineBlockPicker;
@@ -208,15 +212,15 @@ export class HookaService {
     };
   }
 
-  public obtainMininumAndMaxinumPrice(hookas: Array<HookasWithSiteMetadata>): SliderComponentProps {
-    let arraySoloPrecios = hookas.map((entry) => Number(entry.precioOriginal.replace(/,/g, '.'))).filter((entry) => !Number.isNaN(entry));
+  public obtainMininumAndMaxinumPrice(hookas: Array<HookasWithSiteMetadata>, mininum?: number): SliderComponentProps {
+    let arraySoloPrecios: Array<number> = hookas.map((entry) => entry.precioOriginal as number);
     arraySoloPrecios = arraySoloPrecios.sort((a, b) => a - b);
     return {
       value: arraySoloPrecios[0],
       highValue: arraySoloPrecios[arraySoloPrecios.length - 1],
       options: {
         ceil: arraySoloPrecios[arraySoloPrecios.length - 1],
-        floor: arraySoloPrecios[0],
+        floor: mininum ? mininum : arraySoloPrecios[0],
         translate: (value: number, label: LabelType): string => {
           return value + '€';
         },
