@@ -1,6 +1,12 @@
 @import "../../../../variables.scss";
 @import "../../../../../src/app/styles/mixins.scss";
 
+.baseLateral {
+  height: 100%;
+  width: 15vw;
+  background-color: lightsteelblue;
+}
+
 .estructuraLanding {
   height: 100%;
   background-color: lighten($color: $mainColor, $amount: 20%);
@@ -8,6 +14,30 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  .contenedorIzq {
+    display: none;
+    @extend .baseLateral;
+    background-image: url("../../../../assets/redes_sociales.jpg");
+    background-repeat: round;
+    @include for-big-desktop-up {
+      display: block !important;
+    }
+  }
+  .contenedorDer {
+    display: none;
+    @extend .baseLateral;
+    background-image: url("../../../../assets/subscribete.jpg");
+    background-repeat: round;
+    position: relative;
+    .contenedorInputSubscribe {
+      position: absolute;
+      top: 44%;
+      padding: 0px 3px;
+    }
+    @include for-big-desktop-up {
+      display: block !important;
+    }
+  }
   .contendorBusqueda {
     display: flex;
     overflow: hidden;
@@ -15,7 +45,8 @@
     justify-content: center;
     flex-direction: column;
     height: 100%;
-    width: 120vh;
+    width: 70vw;
+    padding: 0px 10px 0px 10px;
     .logoEmpresa {
       @include for-phone-only {
         display: none;

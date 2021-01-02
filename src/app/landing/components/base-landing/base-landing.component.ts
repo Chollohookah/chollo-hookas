@@ -4,6 +4,9 @@ import { ComparadorHookasInputModel } from 'projects/generales/src/lib/comparado
 import { AnimationControllerService } from '../../../../../projects/generales/src/lib/servicios/animation-controller.service';
 import { HookaSearcherInputComponent } from '../../../../../projects/generales/src/lib/comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
 import { cloneDeep } from 'lodash-es';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { ButtonActionFunction } from 'projects/generales/src/lib/subscribe-input-button-in-one/subscribe-input-button-in-one.component';
 
 @Component({
   selector: 'app-base-landing',
@@ -56,7 +59,17 @@ export class BaseLandingComponent implements OnInit {
     },
   };
 
-  constructor(private animationController: AnimationControllerService) {}
+  public fnBtnClick: ButtonActionFunction = {
+    type: 'async',
+    succesMessage: 'Ya tenemos tu correo :)!',
+    function: (email: string) => {
+      return this.http
+        .post(environment.protocol + '://' + environment.host + ':' + environment.port + '/emails', { email: email })
+        .toPromise();
+    },
+  };
+
+  constructor(private animationController: AnimationControllerService, private http: HttpClient) {}
 
   ngOnInit(): void {}
 

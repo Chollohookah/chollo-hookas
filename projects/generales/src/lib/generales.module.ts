@@ -36,6 +36,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ImgAccordionComponent } from './img-accordion/img-accordion.component';
 import { DescriptionComponent } from './description/description.component';
 import { MatListModule } from '@angular/material/list';
+import { SubscribeInputButtonInOneComponent } from './subscribe-input-button-in-one/subscribe-input-button-in-one.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { MatListModule } from '@angular/material/list';
     SliderComponent,
     ImgAccordionComponent,
     DescriptionComponent,
+    SubscribeInputButtonInOneComponent,
   ],
   imports: [
     CommonModule,
@@ -77,7 +79,7 @@ import { MatListModule } from '@angular/material/list';
     NgxSliderModule,
     ClipboardModule,
   ],
-  exports: [GeneralesComponent, ComparadorHookasComponent, ImgAccordionComponent, DescriptionComponent, MatListModule],
+  exports: [GeneralesComponent, ComparadorHookasComponent, ImgAccordionComponent, DescriptionComponent, MatListModule,SubscribeInputButtonInOneComponent],
   providers: [
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: MAT_DIALOG_DATA, useValue: {} },

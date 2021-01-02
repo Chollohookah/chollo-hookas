@@ -84,21 +84,11 @@ export class ComparadorHookasComponent implements OnInit {
 
   private cargarHookasGenerales(): void {
     this.peticionCargaHookasTerminada = false;
-    let filter = {
-      order: 'dateBlock desc',
-      include: [
-        {
-          relation: 'minedIds',
-          scope: {
-            include: [{ relation: 'data' }],
-          },
-        },
-      ],
-    };
+
     this.http
       .get(
         `${environment.protocol}://${environment.host + ':' + environment.port}/blocks/latestBlock?filter=${encodeURIComponent(
-          JSON.stringify(filter)
+          JSON.stringify({})
         )}`
       )
       .subscribe(
