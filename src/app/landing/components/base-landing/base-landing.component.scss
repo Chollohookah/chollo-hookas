@@ -45,7 +45,11 @@
     justify-content: center;
     flex-direction: column;
     height: 100%;
-    width: 70vw;
+    width: 100%;
+    @include for-big-desktop-up {
+      width: 70vw;
+    }
+
     padding: 0px 10px 0px 10px;
     .logoEmpresa {
       @include for-phone-only {
