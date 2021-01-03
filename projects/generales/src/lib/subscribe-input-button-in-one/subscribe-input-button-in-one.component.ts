@@ -35,6 +35,7 @@ export class SubscribeInputButtonInOneComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.rootElement = document.getElementById('rootSubscribeButtonInOne');
     if (this.rootElement) {
       this.emailElement = this.rootElement.querySelector('#email');
