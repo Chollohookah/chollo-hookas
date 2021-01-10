@@ -67,12 +67,13 @@ export class HookaService {
     return new Promise((resolve, reject) => {
       const worker = new InlineWorker(() => {
         const filterHookas = (busqueda: FiltrosAplicadosObjModel, todasCachimbas: Array<HookasWithSiteMetadata>, objetoCookies: any) => {
-          let res = todasCachimbas;
+          let res = JSON.parse(JSON.stringify(todasCachimbas));
           if (busqueda.inputValue && busqueda.inputValue != '') {
-            res = res
-              .map((entry) => JSON.stringify(entry))
-              .filter((hookaStringed) => hookaStringed.toLowerCase().includes(busqueda.inputValue.toLowerCase()))
-              .map((entry) => JSON.parse(entry));
+            res = res.filter((hooka) => {
+              let tradeMarkAndModelConcat = (hooka.marca + hooka.modelo).toLowerCase();
+              return tradeMarkAndModelConcat.includes(busqueda.inputValue.toLowerCase());
+            });
+            console.log(res);
           }
           //Filtro agotados
           if (busqueda.ocultarAgotados != undefined && busqueda.ocultarAgotados === true) {
@@ -153,7 +154,7 @@ export class HookaService {
 
       worker.postMessage({
         busqueda: this.filtrosAplicados,
-        allShisha: this.copiaCachimbas,
+        allShisha: cloneDeep(this.copiaCachimbas),
         objetoCookies: this.cookieService.getAll(),
       });
 
@@ -216,11 +217,11 @@ export class HookaService {
     let arraySoloPrecios: Array<number> = hookas.map((entry) => entry.precioOriginal as number);
     arraySoloPrecios = arraySoloPrecios.sort((a, b) => a - b);
     return {
-      value: arraySoloPrecios[0],
-      highValue: arraySoloPrecios[arraySoloPrecios.length - 1],
+      value: arraySoloPrecios.length > 0 ? arraySoloPrecios[0] : 0,
+      highValue: arraySoloPrecios.length > 0 ? arraySoloPrecios[arraySoloPrecios.length - 1] : 0,
       options: {
-        ceil: arraySoloPrecios[arraySoloPrecios.length - 1],
-        floor: mininum ? mininum : arraySoloPrecios[0],
+        ceil: arraySoloPrecios.length > 0 ? arraySoloPrecios[arraySoloPrecios.length - 1] : 0,
+        floor: mininum ? mininum : arraySoloPrecios.length > 0 ? arraySoloPrecios[0] : 0,
         translate: (value: number, label: LabelType): string => {
           return value + '€';
         },

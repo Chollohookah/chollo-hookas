@@ -25,7 +25,8 @@ export class SelectorConBuscadorComponent implements OnInit {
 
   @Input('entradaSelector') set entradaSelector(arrayDatos: Array<ClaveValorBandera>) {
     if (arrayDatos && arrayDatos instanceof Array && arrayDatos.length > 0) {
-      if (arrayDatos.length == 1) this.formularioBusqueda.get('itemSeleccionado').patchValue(arrayDatos[0].valor);
+      arrayDatos = this.deleteDuplicated(arrayDatos);
+     // if (arrayDatos.length == 1) this.formularioBusqueda.get('itemSeleccionado').patchValue(arrayDatos[0].valor);
       this.arrayDatos = cloneDeep(arrayDatos);
       this.arrayDatosClone = cloneDeep(this.arrayDatos);
       this.yesData();
@@ -67,6 +68,17 @@ export class SelectorConBuscadorComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  private deleteDuplicated(arrayData: Array<ClaveValorModel>) {
+    return arrayData.filter((entry, index, self) => {
+      return (
+        index ===
+        self.findIndex((t) => {
+          return t.valor === entry.valor && t.clave === entry.clave;
+        })
+      );
+    });
+  }
 
   public removeSelection() {
     this.formularioBusqueda.reset();
