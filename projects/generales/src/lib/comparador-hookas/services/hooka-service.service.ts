@@ -73,7 +73,6 @@ export class HookaService {
               let tradeMarkAndModelConcat = (hooka.marca + hooka.modelo).toLowerCase();
               return tradeMarkAndModelConcat.includes(busqueda.inputValue.toLowerCase());
             });
-            console.log(res);
           }
           //Filtro agotados
           if (busqueda.ocultarAgotados != undefined && busqueda.ocultarAgotados === true) {

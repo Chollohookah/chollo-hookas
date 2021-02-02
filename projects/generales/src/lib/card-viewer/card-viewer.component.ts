@@ -33,7 +33,7 @@ export class CardViewerComponent implements OnInit {
       color: 'secondary',
       tooltip: 'Más información',
       action: () => {
-        this.dialog.open(DescriptionComponent, { data: this._item });
+        this.dialog.open(DescriptionComponent, { data: this._item, autoFocus: false });
       },
     },
     {

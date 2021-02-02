@@ -105,7 +105,6 @@ export class FiltrosAvanzadosComponent implements OnInit {
           this.configuracionesDeSelectores[this.INDICE_MODELO].configuracionInicial.disabled = false;
           this.hookaservice.setFilterPropertyValue('modelo', '');
           let res: EnvioHookasFiltradas = await this.hookaservice.realizarFiltro();
-          console.log('AQUI', res);
           this.actualizarDesdeSelectores.emit(res);
         },
       },

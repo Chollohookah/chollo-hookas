@@ -1,8 +1,10 @@
+@import "../../../../../src/app/styles/mixins.scss";
 .cardViewer {
   overflow: hidden;
   height: 100%;
   .mat-card-title {
     font-size: 2vh !important;
+    line-height: 1.9vh;
   }
   .mat-card-subtitle {
     font-size: 1.2vh !important;

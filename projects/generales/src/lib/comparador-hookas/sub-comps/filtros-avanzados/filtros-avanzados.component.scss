@@ -9,6 +9,10 @@
   @include for-phone-only {
     width: auto !important;
   }
+  @include for-phone-only {
+    height: 80vh !important;
+    overflow: scroll !important;
+  }
   height: auto;
   right: 0;
   border-radius: 0px 0px 0px 5px;

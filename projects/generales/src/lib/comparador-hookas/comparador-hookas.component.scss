@@ -84,7 +84,7 @@
       height: auto;
       width: 35vh;
       @include for-phone-only {
-        width: 25vh;
+        width: 43vw;
       }
       @include for-smaller-phones {
         width: 300px;

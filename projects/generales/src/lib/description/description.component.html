@@ -1,11 +1,10 @@
-<div *ngIf="hooka">
-  <div class="wrapperEsqueleto">
+  <div class="wrapperEsqueleto" *ngIf="hooka">
     <div>
       <lib-img-accordion [imagenes]="hooka.fotos && hooka.fotos.length > 0 ? hooka.fotos : [hooka.imagen]"></lib-img-accordion>
     </div>
-    <div class="columnView">
+    <div class="columnView mt-3 pb-3">
       <div>
-        <img [src]="hooka.logoCompany" alt="" srcset="" />
+        <img class="imagenCompania" [src]="hooka.logoCompany" alt="" srcset="" />
         <h2 class="my-2">{{ hooka.titulo }}</h2>
         <p *ngIf="hooka.shortDesc">{{ hooka.shortDesc }}</p>
         <div class="text-right">
@@ -37,5 +36,4 @@
       </div>
     </div>
   </div>
-</div>
 
