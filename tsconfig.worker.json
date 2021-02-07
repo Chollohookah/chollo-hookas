@@ -6,5 +6,5 @@
     "lib": ["es2018", "webworker"],
     "types": []
   },
-  "include": ["./projects/generales/src/lib/web-workers/web-workers.worker.ts"]
+  "include": ["./src/app/workers/web-workers.worker.ts"]
 }

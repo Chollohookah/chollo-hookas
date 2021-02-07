@@ -128,44 +128,6 @@
           }
         }
       }
-    },
-    "generales": {
-      "projectType": "library",
-      "root": "projects/generales",
-      "sourceRoot": "projects/generales/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/generales/tsconfig.lib.json",
-            "project": "projects/generales/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/generales/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/generales/src/test.ts",
-            "tsConfig": "projects/generales/tsconfig.spec.json",
-            "karmaConfig": "projects/generales/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/generales/tsconfig.lib.json",
-              "projects/generales/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
     }
   },
   "defaultProject": "chollo-hookas"

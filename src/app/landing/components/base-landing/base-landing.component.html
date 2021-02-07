@@ -5,12 +5,19 @@
       <img src="assets/download.png" class="imagenLogo img-fluid" />
     </div>
     <div class="w-100 h-100">
-      <lib-comparador-hookas [inputModel]="modeloInputComparador"></lib-comparador-hookas>
+      <lib-comparador-hookas
+        [inputModel]="modeloInputComparador"
+        [APIcomms]="APIComunicator"
+        (alertHappen)="printToast($event)"
+      ></lib-comparador-hookas>
     </div>
   </div>
   <div class="contenedorDer">
     <div class="contenedorInputSubscribe w-100">
-      <lib-subscribe-input-button-in-one [onClickCallback]="fnBtnClick"></lib-subscribe-input-button-in-one>
+      <lib-subscribe-input-button-in-one
+        [onClickCallback]="fnBtnClick"
+        (alertHappen)="printToast($event)"
+      ></lib-subscribe-input-button-in-one>
     </div>
   </div>
 </div>

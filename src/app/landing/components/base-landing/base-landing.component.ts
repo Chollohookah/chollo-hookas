@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ComparadorHookasComponent } from 'projects/generales/src/lib/comparador-hookas/comparador-hookas.component';
-import { ComparadorHookasInputModel } from 'projects/generales/src/lib/comparador-hookas/interfaces/ComparadorHooksInputModel';
-import { AnimationControllerService } from '../../../../../projects/generales/src/lib/servicios/animation-controller.service';
-import { HookaSearcherInputComponent } from '../../../../../projects/generales/src/lib/comparador-hookas/sub-comps/hooka-searcher-input/hooka-searcher-input.component';
 import { cloneDeep } from 'lodash-es';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ButtonActionFunction } from 'projects/generales/src/lib/subscribe-input-button-in-one/subscribe-input-button-in-one.component';
-
+import {
+  ComparadorHookasInputModel,
+  HookaSearcherInputComponent,
+  ButtonActionFunction,
+  AnimationControllerService,
+  ComparadorHookasApi,
+} from '@tihomir22/generales-wrapper-lib';
+import { ToastrService } from 'ngx-toastr';
+import { SimpleAlert } from '@tihomir22/generales-wrapper-lib/lib/models';
 @Component({
   selector: 'app-base-landing',
   templateUrl: './base-landing.component.html',
@@ -69,9 +72,19 @@ export class BaseLandingComponent implements OnInit {
     },
   };
 
-  constructor(private animationController: AnimationControllerService, private http: HttpClient) {}
+  public APIComunicator: ComparadorHookasApi = {
+    protocol: environment.protocol,
+    host: environment.host,
+    port: environment.port,
+  };
+
+  constructor(private animationController: AnimationControllerService, private http: HttpClient, private toast: ToastrService) {}
 
   ngOnInit(): void {}
+
+  public printToast(ev: SimpleAlert) {
+    this.toast[ev.type](ev.title, ev.desc, {});
+  }
 
   private triggerVisibilityStatefilters() {
     if (this.modeloInputComparador.estadoAnimacion == 'terminada') {

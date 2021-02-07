@@ -1,9 +1,0 @@
-<div id="rootSubscribeButtonInOne">
-  <form [formGroup]="formGroup">
-    <input type="email" id="email" formControlName="email" />
-    <label for="email">Correo electronico</label>
-    <button id="button">
-      <span [ngClass]="{ 'spinner-border': loadingAsync }"> {{ !loadingAsync ? "OK" : "" }}</span>
-    </button>
-  </form>
-</div>
