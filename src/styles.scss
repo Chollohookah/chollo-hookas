@@ -38,6 +38,15 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.js-image-zoom__zoomed-area{
+.js-image-zoom__zoomed-area {
   z-index: 1000;
+}
+#lib_login {
+  .login-card-img {
+    object-fit: none !important;
+  }
+
+  .login-btn {
+    background-color: $mainColor;
+  }
 }
