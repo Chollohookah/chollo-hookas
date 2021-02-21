@@ -1,0 +1,18 @@
+<div class="wrapperListPost">
+  <mat-card>
+    <div class="row" *ngFor="let post of listPosts">
+      <div class="col-3">
+        <img [src]="post.imgPostBase64" alt="" srcset="" />
+      </div>
+      <div class="col-9">
+        <h4>{{ post.nombre }}</h4>
+        <p>{{ post.desc }}</p>
+        <div>
+          <button mat-raised-button color="primary" (click)="verPost(post)">Ver post</button>
+          <button mat-raised-button class="warm" (click)="editPost(post)">Editar post</button>
+          <button mat-raised-button color="dang" (click)="eliminarPost(post)">Eliminar post</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -12,6 +12,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GeneralesModule } from '@tihomir22/generales-wrapper-lib';
 import { HttpClientModule } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -23,6 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatFormFieldModule,
     ToastrModule.forRoot(),
+    QuillModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [],

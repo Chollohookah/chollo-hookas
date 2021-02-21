@@ -4,7 +4,7 @@ import { LoginCredentials } from '@tihomir22/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { tap, map, shareReplay } from 'rxjs/operators';
-import { LoginReponseDTO } from '../models/LoginResponseDTO';
+import { LoginReponseDTO, User } from '../models/LoginResponseDTO';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 @Injectable({
@@ -44,7 +44,12 @@ export class AuthService {
   private setSession(response: LoginReponseDTO) {
     const expiresAt = moment().add(response.expiresIn, 'second');
     localStorage.setItem('id_token', response.token);
+    localStorage.setItem('user_id', response.user.id);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+  }
+
+  public returnUserId() {
+    return localStorage.getItem('user_id');
   }
 
   logout() {

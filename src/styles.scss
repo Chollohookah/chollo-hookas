@@ -2,6 +2,9 @@
 @include mat-core();
 @import "./palettes/palette.scss";
 @import "./variables.scss";
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+@import "./stylesheets/bootstrap-admin/sb-admin-2.scss";
 
 $theme-colors: (
   "primary": $mainColor,
@@ -27,6 +30,10 @@ body {
 }
 .c-pointer {
   cursor: pointer !important;
+}
+
+.ql-editor {
+  resize: vertical;
 }
 
 html,
