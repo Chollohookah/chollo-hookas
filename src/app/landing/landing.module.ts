@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LandingRoutingModule } from './landing-routing.module';
 import { BaseLandingComponent } from './components/base-landing/base-landing.component';
-import {GeneralesModule} from '@tihomir22/generales-wrapper-lib';
+import {GeneralesModule} from '@chollohookah/generales-wrapper-lib';
 
 
 @NgModule({

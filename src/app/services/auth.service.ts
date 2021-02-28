@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginCredentials } from '@tihomir22/generales-wrapper-lib';
+import { LoginCredentials } from '@chollohookah/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { tap, map, shareReplay } from 'rxjs/operators';

@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { GeneralesModule } from '@tihomir22/generales-wrapper-lib';
+import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 @NgModule({

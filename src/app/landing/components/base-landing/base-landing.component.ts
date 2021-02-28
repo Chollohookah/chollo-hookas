@@ -8,9 +8,9 @@ import {
   ButtonActionFunction,
   AnimationControllerService,
   ComparadorHookasApi,
-} from '@tihomir22/generales-wrapper-lib';
+} from '@chollohookah/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
-import { SimpleAlert } from '@tihomir22/generales-wrapper-lib/lib/models';
+import { SimpleAlert } from '@chollohookah/generales-wrapper-lib/lib/models';
 @Component({
   selector: 'app-base-landing',
   templateUrl: './base-landing.component.html',
