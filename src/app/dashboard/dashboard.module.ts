@@ -6,9 +6,10 @@ import { DashboardWrapperComponent } from './comps/dashboard-wrapper/dashboard-w
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../auth.interceptor';
+import { MainComponent } from './comps/main/main.component';
 
 @NgModule({
-  declarations: [DashboardWrapperComponent],
+  declarations: [DashboardWrapperComponent, MainComponent],
   imports: [CommonModule, RouterModule, DashboardRoutingModule, HttpClientModule],
   providers: [
     {
@@ -18,4 +19,4 @@ import { AuthInterceptor } from '../auth.interceptor';
     },
   ],
 })
-export class DashboardModule {}
+export class DashboardModule { }

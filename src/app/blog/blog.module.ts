@@ -6,7 +6,6 @@ import { ListBlogComponent } from './list-blog/list-blog.component';
 import { AddBlogComponent } from './add-blog/add-blog.component';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { GeneralesModule } from '@tihomir22/generales-wrapper-lib';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +13,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../auth.interceptor';
 import { MatCardModule } from '@angular/material/card';
 import { ViewPostComponent } from './view-post/view-post.component';
-
+import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [AddBlogComponent, ListBlogComponent, ViewPostComponent],
   imports: [
@@ -23,6 +23,7 @@ import { ViewPostComponent } from './view-post/view-post.component';
     QuillModule,
     ReactiveFormsModule,
     FormsModule,
+    MatIconModule,
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,

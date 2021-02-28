@@ -46,6 +46,10 @@ export class ListBlogComponent implements OnInit {
   }
 
   public editPost(blog: BlogPostDto) {
-    console.log('proximamente');
+    this.router.navigate(['dashboard/blog/edit', blog.id]);
+  }
+
+  public newPost() {
+    this.router.navigate(['dashboard/blog/add']);
   }
 }
