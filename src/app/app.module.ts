@@ -13,12 +13,21 @@ import { environment } from '../environments/environment';
 import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
+import { BrowserModule } from '@angular/platform-browser';
+import { Mugan86GoogleAnalyticsModule } from 'mugan86-ng-google-analytics';
 @NgModule({
   declarations: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
     GeneralesModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    Mugan86GoogleAnalyticsModule.forRoot(
+      {
+        analyticsId: 'G-6X0ZHVKZW3',
+        showLog: false
+      }
+    ),
     MatIconModule,
     MatInputModule,
     HttpClientModule,
