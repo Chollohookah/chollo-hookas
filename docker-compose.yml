@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  chollohookas-ssr:
+    build:
+      context: .
+      args:
+        GITHUB_TOKEN_ARG: XXXXX
+    ports:
+      - "4000:4000"
