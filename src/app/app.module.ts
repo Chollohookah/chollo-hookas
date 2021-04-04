@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { BrowserModule } from '@angular/platform-browser';
 import { Mugan86GoogleAnalyticsModule } from 'mugan86-ng-google-analytics';
+import { MatSidenavModule } from '@angular/material/sidenav';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -22,14 +23,13 @@ import { Mugan86GoogleAnalyticsModule } from 'mugan86-ng-google-analytics';
     BrowserAnimationsModule,
     GeneralesModule,
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    Mugan86GoogleAnalyticsModule.forRoot(
-      {
-        analyticsId: 'G-6X0ZHVKZW3',
-        showLog: false
-      }
-    ),
+    Mugan86GoogleAnalyticsModule.forRoot({
+      analyticsId: 'G-6X0ZHVKZW3',
+      showLog: false,
+    }),
     MatIconModule,
     MatInputModule,
+    MatSidenavModule,
     HttpClientModule,
     MatFormFieldModule,
     ToastrModule.forRoot(),

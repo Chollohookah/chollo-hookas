@@ -3,15 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { LandingRoutingModule } from './landing-routing.module';
 import { BaseLandingComponent } from './components/base-landing/base-landing.component';
-import {GeneralesModule} from '@chollohookah/generales-wrapper-lib';
-
+import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [BaseLandingComponent],
-  imports: [
-    CommonModule,
-    GeneralesModule,
-    LandingRoutingModule
-  ]
+  imports: [CommonModule, MatSidenavModule, GeneralesModule, LandingRoutingModule],
 })
-export class LandingModule { }
+export class LandingModule {}

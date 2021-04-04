@@ -1,23 +1,33 @@
-<div class="estructuraLanding">
-  <div class="contenedorIzq"></div>
-  <div class="contendorBusqueda">
-    <div class="my-3 logoEmpresa">
-      <img src="assets/download.png" class="imagenLogo img-fluid" />
-    </div>
-    <div class="w-100 h-100">
-      <lib-comparador-hookas
-        [inputModel]="modeloInputComparador"
-        [APIcomms]="APIComunicator"
-        (alertHappen)="printToast($event)"
-      ></lib-comparador-hookas>
-    </div>
-  </div>
-  <div class="contenedorDer">
-    <div class="contenedorInputSubscribe w-100">
-      <lib-subscribe-input-button-in-one
-        [onClickCallback]="fnBtnClick"
-        (alertHappen)="printToast($event)"
-      ></lib-subscribe-input-button-in-one>
-    </div>
-  </div>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation">
+    <lib-block-list [blocks]="itemsToDisplay" [inSideNav]="true" (blockClicked)="changeType($event)"></lib-block-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main>
+      <div class="estructuraLanding">
+        <!--  <div class="contenedorIzq"></div>-->
+        <div class="contendorBusqueda">
+          <div class="my-3 logoEmpresa">
+            <img src="assets/brand.png" class="imagenLogo img-fluid" />
+          </div>
+          <div class="w-100 h-100">
+            <lib-header [headerItems]="itemsToDisplay" (sidenavToggle)="sidenav.toggle()" (blockCliked)="changeType($event)"></lib-header>
+            <lib-comparador-hookas
+              [inputModel]="modeloInputComparador"
+              [APIcomms]="APIComunicator"
+              (alertHappen)="printToast($event)"
+            ></lib-comparador-hookas>
+          </div>
+        </div>
+        <!--<div class="contenedorDer">
+          <div class="contenedorInputSubscribe w-100">
+            <lib-subscribe-input-button-in-one
+              [onClickCallback]="fnBtnClick"
+              (alertHappen)="printToast($event)"
+            ></lib-subscribe-input-button-in-one>
+          </div>
+        </div>-->
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

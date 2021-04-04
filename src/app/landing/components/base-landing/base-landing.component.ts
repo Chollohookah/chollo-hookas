@@ -8,18 +8,62 @@ import {
   ButtonActionFunction,
   AnimationControllerService,
   ComparadorHookasApi,
+  HookaService,
 } from '@chollohookah/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
 import { SimpleAlert } from '@chollohookah/generales-wrapper-lib/lib/models';
+import { HeaderItems } from '@chollohookah/generales-wrapper-lib/lib/components/header/header.component';
 @Component({
   selector: 'app-base-landing',
   templateUrl: './base-landing.component.html',
   styleUrls: ['./base-landing.component.scss'],
 })
 export class BaseLandingComponent implements OnInit {
+  public itemsToDisplay: Array<HeaderItems> = [
+    {
+      text: 'Cachimbas',
+      assetName: 'cachimba.png',
+      linkPath: 'cachimba',
+    },
+    {
+      text: 'Accesorios',
+      assetName: 'accesorios.png',
+      linkPath: 'accesorio',
+    },
+    {
+      text: 'Carbón',
+      assetName: 'carbon.png',
+      linkPath: 'carbon',
+    },
+    {
+      text: 'Cazoleta',
+      assetName: 'cazoletas.svg',
+      linkPath: 'cazoleta',
+    },
+    {
+      text: 'Esencias',
+      assetName: 'esencias.png',
+      linkPath: 'esencias',
+    },
+    {
+      text: 'Manguera',
+      assetName: 'manguera.png',
+      linkPath: 'manguera',
+    },
+    {
+      text: 'Melazas',
+      assetName: 'melazas.png',
+      linkPath: 'melaza',
+    },
+    {
+      text: 'Sabores',
+      assetName: 'sabores.png',
+      linkPath: 'sabor',
+    },
+  ];
   public modeloInputComparador: ComparadorHookasInputModel = {
-    textoInputAntesDeClickear: 'Introduce algo',
-    placeholderAlComenzarAEscribir: 'Cachimbas de todo tipo...',
+    textoInputAntesDeClickear: 'Busca por marca,modelo,nombres...',
+    placeholderAlComenzarAEscribir: 'Cachimbas,cazoletas,mangueras,accesorios,carbones...',
     estadoAnimacion: 'terminada',
     estadoExpansion: 'cerrada',
     /* iconoSort: {
@@ -78,12 +122,21 @@ export class BaseLandingComponent implements OnInit {
     port: environment.port,
   };
 
-  constructor(private animationController: AnimationControllerService, private http: HttpClient, private toast: ToastrService) {}
+  constructor(
+    private animationController: AnimationControllerService,
+    private http: HttpClient,
+    private toast: ToastrService,
+    private hooka: HookaService
+  ) {}
 
   ngOnInit(): void {}
 
   public printToast(ev: SimpleAlert) {
     this.toast[ev.type](ev.title, ev.desc, {});
+  }
+
+  public changeType(blockCliked: HeaderItems) {
+    this.hooka.changedTypeItemToLoad.next(blockCliked.linkPath as any);
   }
 
   private triggerVisibilityStatefilters() {

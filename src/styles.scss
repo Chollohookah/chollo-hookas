@@ -27,6 +27,8 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow: hidden;
+  background-image: url("../src/assets/fondo.jpg");
 }
 .c-pointer {
   cursor: pointer !important;
@@ -34,15 +36,6 @@ body {
 
 .ql-editor {
   resize: vertical;
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .js-image-zoom__zoomed-area {
@@ -56,4 +49,12 @@ body {
   .login-btn {
     background-color: $mainColor;
   }
+}
+
+mat-sidenav {
+  width: 70%;
+}
+
+body {
+  background-color: lighten($color: $mainColor, $amount: 20%);
 }
