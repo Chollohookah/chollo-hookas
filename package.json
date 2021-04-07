@@ -29,7 +29,7 @@
     "@angular/platform-server": "~10.0.14",
     "@angular/router": "~10.0.14",
     "@angular/service-worker": "~10.0.14",
-    "@chollohookah/generales-wrapper-lib": "0.0.25",
+    "@chollohookah/generales-wrapper-lib": "0.0.29",
     "@m0t0r/ngx-slider": "^1.0.0",
     "@nguniversal/express-engine": "^10.0.2",
     "@types/lodash-es": "^4.17.3",
