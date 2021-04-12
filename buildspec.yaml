@@ -4,7 +4,7 @@ phases:
   install:
     commands:
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-      - apt-get update
+      #- apt-get update
       - echo installing nodejs...
       - curl -sL https://deb.nodesource.com/setup_12.x | bash -
       - apt-get install -y nodejs
