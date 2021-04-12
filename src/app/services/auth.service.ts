@@ -7,6 +7,7 @@ import { tap, map, shareReplay } from 'rxjs/operators';
 import { LoginReponseDTO, User } from '../models/LoginResponseDTO';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { UTILS } from '../utils/Utils';
 @Injectable({
   providedIn: 'root',
 })
@@ -42,19 +43,23 @@ export class AuthService {
   }
 
   private setSession(response: LoginReponseDTO) {
-    const expiresAt = moment().add(response.expiresIn, 'second');
-    localStorage.setItem('id_token', response.token);
-    localStorage.setItem('user_id', response.user.id);
-    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    if (UTILS.isBrowser) {
+      const expiresAt = moment().add(response.expiresIn, 'second');
+      localStorage.setItem('id_token', response.token);
+      localStorage.setItem('user_id', response.user.id);
+      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    }
   }
 
   public returnUserId() {
-    return localStorage.getItem('user_id');
+    return UTILS.isBrowser ? localStorage.getItem('user_id') : null;
   }
 
   logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+    if (UTILS.isBrowser) {
+      localStorage.removeItem('id_token');
+      localStorage.removeItem('expires_at');
+    }
   }
 
   public isLoggedIn() {
@@ -66,8 +71,13 @@ export class AuthService {
   }
 
   getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
+    let expiration, expiresAt;
+    if (UTILS.isBrowser) {
+      expiration = localStorage.getItem('expires_at');
+      expiresAt = JSON.parse(expiration);
+      return moment(expiresAt);
+    } else {
+      return moment();
+    }
   }
 }

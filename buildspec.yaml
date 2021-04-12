@@ -20,9 +20,11 @@ phases:
     commands:
       # - echo testing...
       # - echo building...
-      - ng build --prod
+      #- ng build --prod
+      - npm run prerender
 artifacts:
   files:
     - "**/*"
   discard-paths: no
-  base-directory: dist/chollo-hookas
+  #base-directory: dist/chollo-hookas
+  base-directory: dist/chollo-hookas/browser

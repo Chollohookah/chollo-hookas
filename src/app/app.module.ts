@@ -14,7 +14,7 @@ import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { BrowserModule } from '@angular/platform-browser';
-import { Mugan86GoogleAnalyticsModule } from 'mugan86-ng-google-analytics';
+import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { MatSidenavModule } from '@angular/material/sidenav';
 @NgModule({
   declarations: [AppComponent],
@@ -23,10 +23,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     BrowserAnimationsModule,
     GeneralesModule,
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    Mugan86GoogleAnalyticsModule.forRoot({
+    NgxGoogleAnalyticsModule.forRoot('G-6X0ZHVKZW3'),
+    NgxGoogleAnalyticsRouterModule,
+    /*Mugan86GoogleAnalyticsModule.forRoot({
       analyticsId: 'G-6X0ZHVKZW3',
       showLog: false,
-    }),
+    }),*/
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
