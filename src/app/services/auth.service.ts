@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { LoginCredentials } from '@chollohookah/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -8,12 +8,13 @@ import { LoginReponseDTO, User } from '../models/LoginResponseDTO';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { UTILS } from '../utils/Utils';
+import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private toastService: ToastrService;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId) {}
   public inyectToastService(toastService: ToastrService) {
     this.toastService = toastService;
   }
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   private setSession(response: LoginReponseDTO) {
-    if (UTILS.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       const expiresAt = moment().add(response.expiresIn, 'second');
       localStorage.setItem('id_token', response.token);
       localStorage.setItem('user_id', response.user.id);
@@ -52,11 +53,11 @@ export class AuthService {
   }
 
   public returnUserId() {
-    return UTILS.isBrowser ? localStorage.getItem('user_id') : null;
+    return isPlatformBrowser(this.platformId) ? localStorage.getItem('user_id') : null;
   }
 
   logout() {
-    if (UTILS.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('id_token');
       localStorage.removeItem('expires_at');
     }
@@ -72,7 +73,7 @@ export class AuthService {
 
   getExpiration() {
     let expiration, expiresAt;
-    if (UTILS.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       expiration = localStorage.getItem('expires_at');
       expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
