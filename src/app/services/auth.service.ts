@@ -43,8 +43,72 @@ export class AuthService {
     });
   }
 
+  public doRegister(ev: LoginCredentials): Observable<0 | 1> {
+    return new Observable((observer) => {
+      this.http
+        .post(environment.protocol + '://' + environment.host + ':' + environment.port + '/' + environment.registerPath, {
+          pass: ev.pass,
+          email: ev.email,
+          username: ev.email,
+          name: ev.name,
+        })
+        .pipe(shareReplay())
+        .subscribe(
+          (data: User) => {
+            observer.next(0);
+          },
+          (err) => {
+            this.toastService.error(err.error.error.message, 'Ha ocurrido un error');
+            observer.next(1);
+          }
+        );
+    });
+  }
+
+  public doRecoveryPassword(email: string): Observable<0 | 1> {
+    return new Observable((observer) => {
+      this.http
+        .post(environment.protocol + '://' + environment.host + ':' + environment.port + '/' + environment.resetPasswordInit, {
+          email,
+        })
+        .pipe(shareReplay())
+        .subscribe(
+          (data: User) => {
+            this.toastService.success('Te llegará un correo con instrucciones a seguir en un instante', 'Exito');
+            observer.next(0);
+          },
+          (err) => {
+            this.toastService.error(err.error.error.message, 'Ha ocurrido un error');
+            observer.next(1);
+          }
+        );
+    });
+  }
+
+  public doRecoveryPasswordEnd(resetKey: string, newPassEncripted: string): Observable<0 | 1> {
+    return new Observable((observer) => {
+      this.http
+        .post(environment.protocol + '://' + environment.host + ':' + environment.port + '/' + environment.resetPasswordFinish, {
+          resetKey,
+          encriptedPass: newPassEncripted,
+        })
+        .pipe(shareReplay())
+        .subscribe(
+          (data: User) => {
+            this.toastService.success('Tu contraseña ha sido cambiada exitosamente!', 'Exito');
+            observer.next(0);
+          },
+          (err) => {
+            this.toastService.error(err.error.error.message, 'Ha ocurrido un error');
+            observer.next(1);
+          }
+        );
+    });
+  }
+
   private setSession(response: LoginReponseDTO) {
     if (isPlatformBrowser(this.platformId)) {
+      console.log(response);
       const expiresAt = moment().add(response.expiresIn, 'second');
       localStorage.setItem('id_token', response.token);
       localStorage.setItem('user_id', response.user.id);

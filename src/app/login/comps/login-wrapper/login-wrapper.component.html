@@ -2,7 +2,11 @@
   <lib-login
     [leftImageURL]="'assets/loschookerinos.png'"
     [logoImageURL]="'assets/download.png'"
+    [estadoForm]="tipoACargar"
     (alertHappen)="handleAlertHappen($event)"
     (loginExitosoFront)="handleLoginExitosoFront($event)"
+    (registroExitosoFront)="handleRegistroExitosoFront($event)"
+    (recuperarExitoso)="handleRecuperarExitoso($event)"
+    (seteoNuevaContrasenyaExitoso)="handleSeteoNuevaContrasenyaExitoso($event)"
   ></lib-login>
 </div>

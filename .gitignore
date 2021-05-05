@@ -10,7 +10,6 @@
 #.npmrc
 # dependencies
 /node_modules
-/certs/
 docker-compose.yml
 # profiling files
 chrome-profiler-events*.json
@@ -46,3 +45,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+securitykeys.ts
+certs/ 
