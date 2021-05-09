@@ -7,8 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../../../services/auth.service';
-import { AES } from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import { UTILS } from 'src/app/utils/Utils';
+import * as b64 from 'base-64';
 @Component({
   selector: 'app-login-wrapper',
   templateUrl: './login-wrapper.component.html',
@@ -55,7 +56,11 @@ export class LoginWrapperComponent implements OnInit {
   public handleLoginExitosoFront(ev: LoginCredentials) {
     this.authService.doLogin(ev).subscribe((data) => {
       if (data == 0) {
-        this.router.navigate(['dashboard']);
+        if (this.authService.isAdministrator()) {
+          this.router.navigate(['dashboard']);
+        } else {
+          this.router.navigate(['blog']);
+        }
       }
     });
   }
@@ -80,14 +85,17 @@ export class LoginWrapperComponent implements OnInit {
 
   public handleSeteoNuevaContrasenyaExitoso(ev: string) {
     if (this.resetKey && ev) {
-      this.authService
-        .doRecoveryPasswordEnd(this.resetKey, UTILS.universalBtoa(AES.encrypt(ev, environment.AES_KEY).toString()))
-        .subscribe((data) => {
-          if (data == 0) {
-            this.tipoACargar = 'login';
-            this.router.navigate(['login'], { replaceUrl: true, queryParams: { loadViewId: 1 } });
-          }
-        });
+      let encrypted = CryptoJS.AES.encrypt(ev, environment.AES_KEY, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7,
+      }).toString();
+
+      this.authService.doRecoveryPasswordEnd(this.resetKey, encrypted).subscribe((data) => {
+        if (data == 0) {
+          this.tipoACargar = 'login';
+          this.router.navigate(['login'], { replaceUrl: true, queryParams: { loadViewId: 1 } });
+        }
+      });
     } else {
       this.handleAlertHappen({ title: 'Error', type: 'danger', desc: 'La clave de reseteo o la contraseña no existen!' });
     }

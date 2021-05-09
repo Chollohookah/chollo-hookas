@@ -14,7 +14,7 @@ export class LoginGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.authService.isLoggedOut()) {
+    if (this.authService.isLoggedOut() || !this.authService.isAdministrator()) {
       this.toast.error('No tienes permiso para acceder a esta sección', 'Sin logear');
       this.router.navigate(['/login'], { replaceUrl: true });
       return false;

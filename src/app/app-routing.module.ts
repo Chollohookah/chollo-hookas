@@ -15,6 +15,11 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [LoginGuard],
   },
+  {
+    path: 'blog',
+    loadChildren: () => import('./user-blog/user-blog.module').then((m) => m.UserBlogModule),
+    canActivate: [],
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,19 @@
+<app-user-view-blog>
+  <div class="contenido">
+    <mat-card *ngFor="let post of listPosts" libMaterialElevator class="pointer" (click)="navigateToPost(post)">
+      <div class="row">
+        <div class="col-2">
+          <img [src]="post.imgPostBase64" alt="" srcset="" />
+        </div>
+        <div class="col-10">
+          <mat-card-header>
+            <mat-card-title>{{ post.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{ post.desc }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content> </mat-card-content>
+        </div>
+      </div>
+    </mat-card>
+    <h2 *ngIf="listPosts.length == 0">No hay posts todavia.</h2>
+  </div>
+</app-user-view-blog>

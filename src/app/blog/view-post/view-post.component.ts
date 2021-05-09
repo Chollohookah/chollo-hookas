@@ -18,15 +18,26 @@ export class ViewPostComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((data) => {
       let id = data.get('id');
-      this.http.get(environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts/' + id).subscribe(
-        (data: any) => {
-          this.postBlog = data;
-          console.log(data);
-        },
-        (error) => {
-          this.toast.error(error.error.message, 'Ha ocurrido un error');
-        }
-      );
+      let slug = data.get('slug');
+      if (id) {
+        this.http.get(environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts/' + id).subscribe(
+          (data: any) => {
+            this.postBlog = data;
+          },
+          (error) => {
+            this.toast.error(error.error.message, 'Ha ocurrido un error');
+          }
+        );
+      } else if (slug) {
+        this.http.get(environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts/slug/' + slug).subscribe(
+          (data: any) => {
+            this.postBlog = data;
+          },
+          (error) => {
+            this.toast.error(error.error.message, 'Ha ocurrido un error');
+          }
+        );
+      }
     });
   }
 }

@@ -16,6 +16,7 @@ import { QuillModule } from 'ngx-quill';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -37,6 +38,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     ToastrModule.forRoot(),
     QuillModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

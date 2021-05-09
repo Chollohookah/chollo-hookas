@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   host: 'localhost',
   port: 3000,
-  protocol: 'https',
+  protocol: 'http',
   ...common
 };
 

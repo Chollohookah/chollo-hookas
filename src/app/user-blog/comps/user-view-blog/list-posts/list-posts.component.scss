@@ -1,0 +1,15 @@
+@import "../../../../../variables.scss";
+
+.contenido {
+  padding: 50px 0px;
+  display: flex;
+  background-color: $secondaryColor;
+  flex-direction: row;
+  justify-content: center;
+  mat-card {
+    width: 60vw;
+    img {
+      max-width: 120px;
+    }
+  }
+}

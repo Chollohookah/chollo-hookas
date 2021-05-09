@@ -5,7 +5,6 @@
 @import "~quill/dist/quill.core.css";
 @import "~quill/dist/quill.snow.css";
 @import "./stylesheets/bootstrap-admin/sb-admin-2.scss";
-
 $theme-colors: (
   "primary": $mainColor,
   "secondary": $secondaryColor,
@@ -43,10 +42,6 @@ body {
   z-index: 1000;
 }
 #lib_login {
-  .login-card-img {
-    object-fit: none !important;
-  }
-
   .login-btn {
     background-color: $mainColor;
   }
@@ -59,3 +54,6 @@ mat-sidenav {
 body {
   background-color: lighten($color: $mainColor, $amount: 20%);
 }
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";

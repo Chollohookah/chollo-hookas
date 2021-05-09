@@ -2,20 +2,25 @@
   <div class="w-100 d-flex justify-content-end">
     <button mat-raised-button class="bg-ternary text-white mb-3" (click)="newPost()">Añadir nuevo post</button>
   </div>
-  <mat-card *ngFor="let post of listPosts">
-    <div class="row">
-      <div class="col-3">
-        <img [src]="post.imgPostBase64" alt="" srcset="" class="img-fluid" />
-      </div>
-      <div class="col-9">
-        <h4>{{ post.nombre }}</h4>
-        <p>{{ post.desc }}</p>
-        <div>
-          <button mat-raised-button color="primary" class="mx-2" (click)="verPost(post)">Ver post</button>
-          <button mat-raised-button class="warm" class="mx-2" (click)="editPost(post)">Editar post</button>
-          <button mat-raised-button color="dang" class="mx-2" (click)="eliminarPost(post)">Eliminar post</button>
+  <ng-container *ngFor="let post of listPosts">
+    <mat-card>
+      <div class="row">
+        <div class="col-3">
+          <img [src]="post.imgPostBase64" alt="" srcset="" class="img-fluid" />
+        </div>
+        <div class="col-9">
+          <h4>
+            {{ post.nombre }} Visible: <strong>{{ !!post.visible }}</strong>
+          </h4>
+          <p>{{ post.desc }}</p>
+          <div>
+            <button mat-raised-button color="primary" class="mx-2" (click)="verPost(post)">Ver post</button>
+            <button mat-raised-button class="warm" class="mx-2" (click)="editPost(post)">Editar post</button>
+            <button mat-raised-button color="dang" class="mx-2" (click)="eliminarPost(post)">Eliminar post</button>
+          </div>
         </div>
       </div>
-    </div>
-  </mat-card>
+    </mat-card>
+    <br />
+  </ng-container>
 </div>

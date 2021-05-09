@@ -4,7 +4,7 @@ import { LoginCredentials } from '@chollohookah/generales-wrapper-lib';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { tap, map, shareReplay } from 'rxjs/operators';
-import { LoginReponseDTO, User } from '../models/LoginResponseDTO';
+import { LoginReponseDTO, Rol, User } from '../models/LoginResponseDTO';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { UTILS } from '../utils/Utils';
@@ -108,12 +108,24 @@ export class AuthService {
 
   private setSession(response: LoginReponseDTO) {
     if (isPlatformBrowser(this.platformId)) {
-      console.log(response);
       const expiresAt = moment().add(response.expiresIn, 'second');
       localStorage.setItem('id_token', response.token);
       localStorage.setItem('user_id', response.user.id);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+      localStorage.setItem('userObj', UTILS.encryptWithAES(JSON.stringify(response.user)));
     }
+  }
+
+  public sendThemToTheVoidAndCloseTheGates() {
+    ['id_token', 'user_id', 'expires_at', 'userObj'].forEach((entry) => localStorage.removeItem(entry));
+  }
+
+  public isAdministrator(): boolean {
+    let userObj: User = JSON.parse(UTILS.decryptWithAES(localStorage.getItem('userObj')));
+    if (userObj) {
+      return !!userObj.rols.find((entry) => entry.codigo == 'AD');
+    }
+    return false;
   }
 
   public returnUserId() {
@@ -122,8 +134,7 @@ export class AuthService {
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('id_token');
-      localStorage.removeItem('expires_at');
+      this.sendThemToTheVoidAndCloseTheGates();
     }
   }
 

@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'view/:id',
     component: ViewPostComponent,
   },
+  {
+    path: 'view/slug/:slug',
+    component: ViewPostComponent,
+  },
 ];
 
 @NgModule({

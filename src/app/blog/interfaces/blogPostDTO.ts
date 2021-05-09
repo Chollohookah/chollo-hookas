@@ -5,5 +5,7 @@ export interface BlogPostDto {
   htmlContent: string;
   draft: boolean;
   userId: string;
+  slug:string;
+  visible?:boolean;
   id?: string;
 }

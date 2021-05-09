@@ -1,0 +1,43 @@
+@import "../../../../variables.scss";
+.blog {
+  overflow: scroll;
+  height: 100vh;
+  .fixedNavbar {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+  }
+  .fondo {
+    background-image: url("../../../../assets/fondo-blog.jpg");
+    background-size: cover;
+    background-attachment: scroll;
+    position: relative;
+    height: 80vh;
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: $ternaryColor;
+      opacity: 0.5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .titulos {
+        h1 {
+          color: white;
+          font-size: 115px;
+          text-align: center;
+          line-height: 115px;
+        }
+        h4 {
+          font-size: 50px;
+          line-height: 50px;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+}

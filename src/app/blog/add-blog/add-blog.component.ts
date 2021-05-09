@@ -6,8 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { BlogPostDto } from '../interfaces/blogPostDTO';
-import { Location } from '@angular/common'
-
+import { Location } from '@angular/common';
+import { UTILS } from 'src/app/utils/Utils';
 
 @Component({
   selector: 'app-add-blog',
@@ -16,7 +16,7 @@ import { Location } from '@angular/common'
 })
 export class AddBlogComponent implements OnInit {
   public formGroup: FormGroup;
-  public formMode: "edit" | "new" = "new";
+  public formMode: 'edit' | 'new' = 'new';
 
   constructor(
     private fb: FormBuilder,
@@ -27,13 +27,14 @@ export class AddBlogComponent implements OnInit {
     private http: HttpClient,
     private location: Location
   ) {
-
     this.formGroup = this.fb.group({
       name: ['', Validators.required],
       desc: ['', Validators.required],
+      slug: [{ value: '', disabled: true }, Validators.required],
+      visible: [true, []],
       img: ['', []],
       contentForm: ['', Validators.required],
-      idPost: ['', []]
+      idPost: ['', []],
     });
 
     this.activatedRoute.paramMap.subscribe((data) => {
@@ -46,9 +47,11 @@ export class AddBlogComponent implements OnInit {
               desc: data.desc,
               img: data.imgPostBase64,
               contentForm: data.htmlContent,
-              idPost: data.id
-            })
-            this.formMode = "edit";
+              idPost: data.id,
+              slug: data.slug,
+              visible: data.visible,
+            });
+            this.formMode = 'edit';
           },
           (error) => {
             this.toast.error(error.error.message, 'Ha ocurrido un error');
@@ -56,7 +59,10 @@ export class AddBlogComponent implements OnInit {
         );
       }
     });
+  }
 
+  public onPostNameChange(event) {
+    this.formGroup.get('slug').patchValue(UTILS.convertToSlug(event.target.value));
   }
 
   public handleImageUpload(event) {
@@ -70,7 +76,7 @@ export class AddBlogComponent implements OnInit {
     myReader.readAsDataURL(file);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   public savePost() {
     this.formGroup.markAllAsTouched();
@@ -80,6 +86,8 @@ export class AddBlogComponent implements OnInit {
         nombre: this.formGroup.value.name,
         desc: this.formGroup.value.desc,
         htmlContent: this.formGroup.value.contentForm,
+        slug: this.formGroup.getRawValue()['slug'],
+        visible: this.formGroup.value.visible,
         userId: this.authService.returnUserId(),
         draft: false,
       };
@@ -97,7 +105,6 @@ export class AddBlogComponent implements OnInit {
     }
   }
 
-
   public editPost() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
@@ -105,24 +112,32 @@ export class AddBlogComponent implements OnInit {
         imgPostBase64: this.formGroup.value.img,
         nombre: this.formGroup.value.name,
         desc: this.formGroup.value.desc,
+        visible: this.formGroup.value.visible,
         htmlContent: this.formGroup.value.contentForm,
         userId: this.authService.returnUserId(),
+        slug: this.formGroup.value.slug,
         draft: false,
       };
-      this.http.put(environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts/' + this.formGroup.value.idPost, valuesToSend).subscribe((data) => {
-        this.toast.success(`Post con nombre ${valuesToSend.nombre} se ha actualizado exitosamente`, 'Exito');
-        this.router.navigate(['dashboard/blog/list'], { replaceUrl: true });
-      }, (error) => {
-        this.toast.error(error.error.message, 'Ha ocurrido un error');
-      })
+      this.http
+        .put(
+          environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts/' + this.formGroup.value.idPost,
+          valuesToSend
+        )
+        .subscribe(
+          (data) => {
+            this.toast.success(`Post con nombre ${valuesToSend.nombre} se ha actualizado exitosamente`, 'Exito');
+            this.router.navigate(['dashboard/blog/list'], { replaceUrl: true });
+          },
+          (error) => {
+            this.toast.error(error.error.message, 'Ha ocurrido un error');
+          }
+        );
     } else {
       this.toast.error('Te olvidas de algun campo obligatorio', 'Error en el formulario');
     }
   }
 
-
   public volverAtras(): void {
     this.location.back();
   }
-
 }

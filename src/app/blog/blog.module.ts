@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ViewPostComponent } from './view-post/view-post.component';
 import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
 import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from '../material/material.module';
 @NgModule({
   declarations: [AddBlogComponent, ListBlogComponent, ViewPostComponent],
   imports: [
@@ -28,9 +29,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MaterialModule,
     HttpClientModule,
     GeneralesModule,
   ],
+  exports: [ViewPostComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
