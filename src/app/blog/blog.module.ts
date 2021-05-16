@@ -15,7 +15,13 @@ import { MatCardModule } from '@angular/material/card';
 import { ViewPostComponent } from './view-post/view-post.component';
 import { GeneralesModule } from '@chollohookah/generales-wrapper-lib';
 import { MatIconModule } from '@angular/material/icon';
+import { MomentModule } from 'ngx-moment';
 import { MaterialModule } from '../material/material.module';
+
+import { ShareButtonsConfig } from 'ngx-sharebuttons';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+
 @NgModule({
   declarations: [AddBlogComponent, ListBlogComponent, ViewPostComponent],
   imports: [
@@ -32,6 +38,9 @@ import { MaterialModule } from '../material/material.module';
     MaterialModule,
     HttpClientModule,
     GeneralesModule,
+    MomentModule,
+    ShareIconsModule,
+    ShareButtonsModule,
   ],
   exports: [ViewPostComponent],
   providers: [

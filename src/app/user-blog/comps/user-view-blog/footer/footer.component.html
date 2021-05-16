@@ -1,0 +1,133 @@
+<footer id="dk-footer" class="dk-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-4">
+        <div class="dk-footer-box-info">
+          <div class="footer-logo">
+            <div class="desc-site">
+              <img src="assets/brand.png" alt="footer_logo" class="img-fluid" />
+              <span class="footer-info-text"> El lider en comparadores de cachimbas en España. 👋</span>
+            </div>
+          </div>
+          <div class="footer-social-link">
+            <h3>Siguenos</h3>
+            <ul>
+              <li>
+                <a class="pointer" href="https://t.me/joinchat/Bu_n742u0XNkNjdk" target="_blank">
+                  <i class="fa fa-telegram"></i>
+                </a>
+              </li>
+              <li>
+                <a class="pointer" href="https://instagram.com/chollohookah?igshid=d9uzc6d9n514" target="_blank">
+                  <i class="fa fa-instagram"></i>
+                </a>
+              </li>
+              <li>
+                <a class="pointer" href="https://www.youtube.com/channel/UC9K7DQ7KpVTcmAq6axswP_w" target="_blank">
+                  <i class="fa fa-youtube"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- End Social link -->
+        </div>
+        <!-- End Footer info -->
+        <div class="footer-awarad">
+          <img src="images/icon/best.png" alt="" />
+          <p>Chollohookah.com 🔥</p>
+        </div>
+      </div>
+      <!-- End Col -->
+      <div class="col-md-12 col-lg-8">
+        <!-- End Contact Row -->
+        <div class="row">
+          <div class="col-md-12 col-lg-6">
+            <div class="footer-widget footer-left-widget">
+              <div class="section-heading">
+                <h3>Enlaces de interés</h3>
+              </div>
+              <ul>
+                <li *ngFor="let item of avalaibleItemsPt1">
+                  <a href="/?type={{ item.linkPath }}">Comparador de {{ item.text | lowercase }}</a>
+                </li>
+              </ul>
+
+              <ul>
+                <li *ngFor="let item of avalaibleItemsPt2">
+                  <a href="/?type={{ item.linkPath }}">Comparador de {{ item.text | lowercase }}</a>
+                </li>
+              </ul>
+            </div>
+            <!-- End Footer Widget -->
+          </div>
+          <!-- End col -->
+          <div class="col-md-12 col-lg-6">
+            <div class="footer-widget">
+              <div class="section-heading">
+                <h3>Subscribete</h3>
+              </div>
+              <p>
+                <!-- Don’t miss to subscribe to our new feeds, kindly fill the form below. -->
+                Enviamos chollos por correo, suscribete para no perderte ninguno y estar al tanto!🥳
+              </p>
+
+              <div class="contenedorInputSubscribe w-100">
+                <lib-subscribe-input-button-in-one
+                  [onClickCallback]="fnBtnClick"
+                  (alertHappen)="printToast($event)"
+                ></lib-subscribe-input-button-in-one>
+              </div>
+              <!-- End form -->
+            </div>
+            <!-- End footer widget -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Widget Row -->
+  </div>
+  <!-- End Contact Container -->
+
+  <div class="copyright">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <span>Copyright © 2021, Todos los derechos reservados Chollohookah.com</span>
+        </div>
+        <!-- End Col -->
+        <div class="col-md-6">
+          <div class="copyright-menu">
+            <ul>
+              <li>
+                <a href="/" class="pointer">Inicio</a>
+              </li>
+              <li>
+                <a class="pointer" (click)="abrirTerminosUso()">Terminos de uso</a>
+              </li>
+              <li>
+                <a class="pointer" (click)="abrirPoliticaPrivacidad()">Politica de privacidad</a>
+              </li>
+              <li>
+                <a href="mailto:{{ mailToContact }}" class="pointer">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- End col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Copyright Container -->
+  </div>
+  <!-- End Copyright -->
+  <!-- Back to top -->
+  <div id="back-to-top" class="back-to-top">
+    <button class="btn btn-dark" title="Ir arriba" style="display: block" (click)="gotoTop()">
+      <i class="fa fa-angle-up"></i>
+    </button>
+  </div>
+  <!-- End Back to top -->
+</footer>

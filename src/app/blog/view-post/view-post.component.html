@@ -1,3 +1,62 @@
 <div *ngIf="postBlog">
+  <div class="avatar-wrapper" *ngIf="userBasicInfo">
+    <div class="image">
+      <img src="assets/only-face.png" class="img-fluig" />
+    </div>
+    <div class="author-data">
+      <div class="wrapperFirstLine">
+        <span class="userName">{{ userBasicInfo.name }}</span>
+        <mat-chip-list class="chipsInteraction">
+          <mat-chip class="bg-primary pointer">Seguir</mat-chip>
+        </mat-chip-list>
+      </div>
+      <div>
+        <span class="postDate mx-2">{{ postBlog?.created || today | amLocal | amDateFormat: "YYYY-MM-DD HH:mm" }}</span>
+        <span class="timeToRead">Lectura de {{ minutesToReadPost }} minutos.</span>
+      </div>
+    </div>
+    <div>
+      <a href="mailto:{{ userBasicInfo.username }}">
+        <mat-icon>mail</mat-icon>
+      </a>
+    </div>
+  </div>
+  <mat-divider class="my-2"> </mat-divider>
+  <h1 *ngIf="postBlog">{{ postBlog.nombre }}</h1>
   <div [innerHTML]="postBlog.htmlContent"></div>
+  <div class="finalUserInteraction">
+    <share-buttons
+      *ngIf="postBlog"
+      [include]="[
+        'facebook',
+        'twitter',
+        'linkedin',
+        'pinterest',
+        'reddit',
+        'telegram',
+        'messenger',
+        'whatsapp',
+        'sms',
+        'email',
+        'print',
+        'copy'
+      ]"
+      [show]="4"
+      [title]="postBlog.nombre"
+      [description]="postBlog.desc"
+      [tags]="'cachimba,chollohookah,etc'"
+    ></share-buttons>
+
+    <div class="likesPost" (mouseover)="haciendoHoverLikes = true" (mouseout)="haciendoHoverLikes = false" (click)="addLike()">
+      <mat-icon>{{ haciendoHoverLikes ? "favorite" : "favorite_border" }}</mat-icon> {{ postBlog?.likes || 0 }} Bocanadas
+    </div>
+  </div>
+  <mat-divider class="my-2"> </mat-divider>
+  <div class="dejarComentario">
+    <mat-form-field class="w-100">
+      <mat-label>Dejar un comentario</mat-label>
+      <textarea matInput placeholder="Creo que voy a decir que..."></textarea>
+    </mat-form-field>
+    <button mat-raised-button>Enviar</button>
+  </div>
 </div>

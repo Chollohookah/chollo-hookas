@@ -1,0 +1,42 @@
+.avatar-wrapper {
+  display: flex;
+  .image {
+    margin-right: 5px;
+    img {
+      max-width: 64px;
+      max-height: 64px;
+    }
+  }
+  .author-data {
+    .wrapperFirstLine {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .userName {
+        margin-right: 10px;
+        margin-left: 0px;
+        font-weight: 600;
+      }
+      .chipsInteraction {
+        .mat-standard-chip {
+          min-height: 25px;
+        }
+      }
+    }
+  }
+}
+
+.finalUserInteraction {
+  display: flex;
+  justify-content: space-between;
+}
+
+.likesPost {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    font-weight: 500;
+  }
+}

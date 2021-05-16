@@ -12,8 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgModule } from '@angular/core';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -30,8 +31,9 @@ import { NgModule } from '@angular/core';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatListModule,
+    MatChipsModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   exports: [
     MatButtonModule,
@@ -42,14 +44,14 @@ import { NgModule } from '@angular/core';
     MatProgressBarModule,
     MatAutocompleteModule,
     MatInputModule,
+    MatChipsModule,
     MatGridListModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatListModule,
-    MatDialogModule,MatCheckboxModule
-  ]
+    MatDialogModule,
+    MatCheckboxModule,
+  ],
 })
-
-export class MaterialModule {
-}
+export class MaterialModule {}

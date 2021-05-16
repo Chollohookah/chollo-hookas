@@ -1,6 +1,11 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav role="navigation">
-    <lib-block-list [blocks]="itemsToDisplay" [inSideNav]="true" (blockClicked)="changeType($event)"></lib-block-list>
+    <lib-block-list
+      [blocks]="itemsToDisplay"
+      [inSideNav]="true"
+      [selectedBlock]="returnSelectedIndex()"
+      (blockClicked)="changeType($event)"
+    ></lib-block-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <main>
@@ -11,7 +16,12 @@
             <img src="assets/brand.png" class="imagenLogo img-fluid" />
           </div>
           <div class="w-100 h-100">
-            <lib-header [headerItems]="itemsToDisplay" (sidenavToggle)="sidenav.toggle()" (blockCliked)="changeType($event)"></lib-header>
+            <lib-header
+              [headerItems]="itemsToDisplay"
+              [selectedBlock]="returnSelectedIndex()"
+              (sidenavToggle)="sidenav.toggle()"
+              (blockCliked)="changeType($event)"
+            ></lib-header>
             <lib-comparador-hookas
               [inputModel]="modeloInputComparador"
               [APIcomms]="APIComunicator"

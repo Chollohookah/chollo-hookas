@@ -13,54 +13,15 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { SimpleAlert } from '@chollohookah/generales-wrapper-lib/lib/models';
 import { HeaderItems } from '@chollohookah/generales-wrapper-lib/lib/components/header/header.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AvalaibleItemTypes } from './static/avalaible-item-types.const';
 @Component({
   selector: 'app-base-landing',
   templateUrl: './base-landing.component.html',
   styleUrls: ['./base-landing.component.scss'],
 })
 export class BaseLandingComponent implements OnInit {
-  public itemsToDisplay: Array<HeaderItems> = [
-    {
-      text: 'Cachimbas',
-      assetName: 'cachimba.png',
-      linkPath: 'cachimba',
-    },
-    {
-      text: 'Accesorios',
-      assetName: 'accesorios.png',
-      linkPath: 'accesorio',
-    },
-    {
-      text: 'Carbón',
-      assetName: 'carbon.png',
-      linkPath: 'carbon',
-    },
-    {
-      text: 'Cazoleta',
-      assetName: 'cazoletas.svg',
-      linkPath: 'cazoleta',
-    },
-    {
-      text: 'Esencias',
-      assetName: 'esencias.png',
-      linkPath: 'esencias',
-    },
-    {
-      text: 'Manguera',
-      assetName: 'manguera.png',
-      linkPath: 'manguera',
-    },
-    {
-      text: 'Melazas',
-      assetName: 'melazas.png',
-      linkPath: 'melaza',
-    },
-    {
-      text: 'Sabores',
-      assetName: 'sabores.png',
-      linkPath: 'sabor',
-    },
-  ];
+  public itemsToDisplay: Array<HeaderItems> = AvalaibleItemTypes;
   public modeloInputComparador: ComparadorHookasInputModel = {
     textoInputAntesDeClickear: 'Busca por marca,modelo,nombres...',
     placeholderAlComenzarAEscribir: 'Cachimbas,cazoletas,mangueras,accesorios,carbones...',
@@ -106,15 +67,7 @@ export class BaseLandingComponent implements OnInit {
     },
   };
 
-  public fnBtnClick: ButtonActionFunction = {
-    type: 'async',
-    succesMessage: 'Ya tenemos tu correo :)!',
-    function: (email: string) => {
-      return this.http
-        .post(environment.protocol + '://' + environment.host + ':' + environment.port + '/emails', { email: email })
-        .toPromise();
-    },
-  };
+  
 
   public APIComunicator: ComparadorHookasApi = {
     protocol: environment.protocol,
@@ -126,10 +79,26 @@ export class BaseLandingComponent implements OnInit {
     private animationController: AnimationControllerService,
     private http: HttpClient,
     private toast: ToastrService,
-    private hooka: HookaService
+    private hooka: HookaService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['type'] && this.isAType(params['type'])) {
+        this.hooka.changedTypeItemToLoad.next(params['type'].toLowerCase());
+      }
+    });
+  }
+
+  public returnSelectedIndex(): number {
+    return AvalaibleItemTypes.findIndex((entry) => this.hooka.latestValueType.toLowerCase() == entry.linkPath.toLowerCase());
+  }
+
+  private isAType(value: string): boolean {
+    return !!AvalaibleItemTypes.map((entry) => entry.linkPath).find((entryFind) => entryFind.toLowerCase() == value.toLowerCase());
+  }
 
   public printToast(ev: SimpleAlert) {
     this.toast[ev.type](ev.title, ev.desc, {});

@@ -1,15 +1,20 @@
 @import "../../../../../variables.scss";
-
-.contenido {
-  padding: 50px 0px;
+.content-wrapper {
   display: flex;
-  background-color: $secondaryColor;
-  flex-direction: row;
   justify-content: center;
-  mat-card {
-    width: 60vw;
-    img {
-      max-width: 120px;
+  background-color: $secondaryColor;
+  .contenido {
+    padding: 50px 0px;
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    mat-card {
+      width: 60vw;
+      margin: 10px 0px;
+      img {
+        max-width: 120px;
+      }
     }
   }
 }

@@ -5,6 +5,7 @@
 @import "~quill/dist/quill.core.css";
 @import "~quill/dist/quill.snow.css";
 @import "./stylesheets/bootstrap-admin/sb-admin-2.scss";
+@import '~ngx-sharebuttons/themes/default/default-theme';
 $theme-colors: (
   "primary": $mainColor,
   "secondary": $secondaryColor,

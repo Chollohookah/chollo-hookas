@@ -30,11 +30,7 @@
     background-image: url("../../../../assets/subscribete.jpg");
     background-repeat: round;
     position: relative;
-    .contenedorInputSubscribe {
-      position: absolute;
-      top: 44%;
-      padding: 0px 3px;
-    }
+    
     @include for-big-desktop-up {
       display: block !important;
     }
