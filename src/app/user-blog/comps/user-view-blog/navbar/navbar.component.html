@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">
+    <img src="assets/brand.png" class="img-fluig" />
+  </a>
   <button
     class="navbar-toggler"
     type="button"
@@ -13,16 +15,13 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item" [ngClass]="{ active: isActive(navbarItem.hrefPath) }" *ngFor="let navbarItem of navbarItems">
+        <a class="nav-link" [attr.href]="navbarItem.hrefPath" (click)="navbarItem.fnOnClick ? navbarItem.fnOnClick($event) : null"
+          >{{ navbarItem.label }} <span *ngIf="isActive(navbarItem.hrefPath)" class="sr-only">(current)</span></a
+        >
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item dropdown">
+
+      <!-- <li class="nav-item dropdown">
         <a
           class="nav-link dropdown-toggle"
           href="#"
@@ -39,7 +38,7 @@
           <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
-      </li>
+      </li>-->
     </ul>
   </div>
 </nav>

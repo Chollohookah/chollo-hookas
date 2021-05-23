@@ -67,8 +67,6 @@ export class BaseLandingComponent implements OnInit {
     },
   };
 
-  
-
   public APIComunicator: ComparadorHookasApi = {
     protocol: environment.protocol,
     host: environment.host,
@@ -105,7 +103,11 @@ export class BaseLandingComponent implements OnInit {
   }
 
   public changeType(blockCliked: HeaderItems) {
-    this.hooka.changedTypeItemToLoad.next(blockCliked.linkPath as any);
+    if (blockCliked.linkPath != 'blog') {
+      this.hooka.changedTypeItemToLoad.next(blockCliked.linkPath as any);
+    } else {
+      this.router.navigate([blockCliked.linkPath])
+    }
   }
 
   private triggerVisibilityStatefilters() {

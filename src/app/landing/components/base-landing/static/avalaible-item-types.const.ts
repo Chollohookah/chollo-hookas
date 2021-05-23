@@ -41,4 +41,9 @@ export const AvalaibleItemTypes: Array<HeaderItems> = [
     assetName: 'sabores.png',
     linkPath: 'sabor',
   },
+  {
+    text: 'Blog',
+    assetName: 'blog.png',
+    linkPath: 'blog',
+  },
 ];

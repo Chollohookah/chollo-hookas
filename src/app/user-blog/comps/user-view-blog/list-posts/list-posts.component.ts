@@ -22,7 +22,6 @@ export class ListPostsComponent implements OnInit {
     this.http.get(environment.protocol + '://' + environment.host + ':' + environment.port + '/blog-posts').subscribe(
       (data: Array<BlogPostDto>) => {
         this.listPosts = data.filter((entry) => entry.visible);
-        console.log(this.listPosts);
       },
       (error) => {
         this.toast.error(error.error.message, 'Ha ocurrido un error');

@@ -30,7 +30,7 @@
     "@angular/platform-server": "~11.2.9",
     "@angular/router": "~11.2.9",
     "@angular/service-worker": "~11.2.9",
-    "@chollohookah/generales-wrapper-lib": "0.0.52",
+    "@chollohookah/generales-wrapper-lib": "0.0.56",
     "@fortawesome/angular-fontawesome": "^0.8.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",

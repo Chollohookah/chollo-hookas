@@ -37,7 +37,6 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.mailToContact = environment.mail;
-    console.log([this.avalaibleItemsPt1, this.avalaibleItemsPt2]);
   }
 
   public abrirTerminosUso(): void {
